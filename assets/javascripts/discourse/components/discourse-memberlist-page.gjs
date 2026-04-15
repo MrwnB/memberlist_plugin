@@ -1,9 +1,8 @@
-/* eslint-disable ember/no-side-effects */
-import { Input } from "@ember/component";
-import { action } from "@ember/object";
-import { on } from "@ember/modifier";
-import { tracked } from "@glimmer/tracking";
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
+import { Input } from "@ember/component";
+import { on } from "@ember/modifier";
+import { action } from "@ember/object";
 import ConditionalLoadingSpinner from "discourse/components/conditional-loading-spinner";
 import EmptyState from "discourse/components/empty-state";
 import UserAvatar from "discourse/components/user-avatar";

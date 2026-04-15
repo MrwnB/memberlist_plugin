@@ -53,7 +53,8 @@ module ::DiscourseMemberlist
       {
         id: group.id,
         name: group.name,
-        label: group.full_name.presence || group.name.tr("_-", " ").split.map(&:capitalize).join(" "),
+        label:
+          group.full_name.presence || group.name.tr("_-", " ").split.map(&:capitalize).join(" "),
         members: serialized_members,
       }
     end

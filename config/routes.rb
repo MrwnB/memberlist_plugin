@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-DiscourseMemberlist::Engine.routes.draw do
-  get "/memberlist-data" => "memberlist#index"
-end
+DiscourseMemberlist::Engine.routes.draw { get "/memberlist-data" => "memberlist#index" }
 
 Discourse::Application.routes.draw do
   get "/memberlist" => "list#latest"

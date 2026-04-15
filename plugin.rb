@@ -7,8 +7,6 @@
 # url: https://www.wildernessguardians.com
 # required_version: 2.7.0
 
-require "set"
-
 enabled_site_setting :discourse_memberlist_enabled
 
 register_asset "stylesheets/common/discourse-memberlist.scss"
