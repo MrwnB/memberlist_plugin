@@ -215,17 +215,17 @@ export default class DiscourseMemberlistPage extends Component {
             <EmptyState @body={{this.loadError}} />
           {{else if this.hasVisibleSections}}
             <div class="discourse-memberlist-sections">
-              {{#each this.filteredSections key="key" as |section|}}
+              {{#each this.filteredSections key="key" as |group|}}
                 <section class="discourse-memberlist-section">
                   <header class="discourse-memberlist-section-header">
                     <div>
-                      <h2>{{section.label}}</h2>
-                      <p>{{section.members.length}} members</p>
+                      <h2>{{group.label}}</h2>
+                      <p>{{group.members.length}} members</p>
                     </div>
                   </header>
 
                   <div class="discourse-memberlist-grid">
-                    {{#each section.members key="key" as |member|}}
+                    {{#each group.members key="key" as |member|}}
                       <article class="discourse-memberlist-card">
                         <UserAvatar
                           @user={{member}}

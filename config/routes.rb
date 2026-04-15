@@ -6,5 +6,5 @@ end
 
 Discourse::Application.routes.draw do
   get "/memberlist" => "list#latest"
-  mount ::DiscourseMemberlist::Engine, at: "/"
+  mount DiscourseMemberlist::Engine, at: "/"
 end

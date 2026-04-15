@@ -1,23 +1,19 @@
+import { apiInitializer } from "discourse/lib/api";
 import getURL from "discourse/lib/get-url";
-import { withPluginApi } from "discourse/lib/plugin-api";
 
-export default {
-  name: "discourse-memberlist-nav",
+export default apiInitializer((api) => {
+  const siteSettings = api.container.lookup("service:site-settings");
 
-  initialize() {
-    withPluginApi((api) => {
-      if (!settings.discourse_memberlist_enabled) {
-        return;
-      }
+  if (!siteSettings.discourse_memberlist_enabled) {
+    return;
+  }
 
-      api.addNavigationBarItem({
-        name: "memberlist",
-        displayName: "Memberlist",
-        href: getURL("/memberlist"),
-        forceActive(_category, _args, router) {
-          return router.currentRouteName === "memberlist";
-        },
-      });
-    });
-  },
-};
+  api.addNavigationBarItem({
+    name: "memberlist",
+    displayName: "Memberlist",
+    href: getURL("/memberlist"),
+    forceActive(_category, _args, router) {
+      return router.currentRouteName === "memberlist";
+    },
+  });
+});
