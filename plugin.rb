@@ -1,21 +1,24 @@
 # frozen_string_literal: true
 
-# name: discourse-plugin-name
-# about: TODO
-# meta_topic_id: TODO
-# version: 0.0.1
-# authors: Discourse
-# url: TODO
+# name: discourse-memberlist
+# about: Public memberlist page for visible closed groups and their members
+# version: 0.1
+# authors: OpenAI
+# url: https://www.wildernessguardians.com
 # required_version: 2.7.0
 
-enabled_site_setting :plugin_name_enabled
+require "set"
 
-module ::MyPluginModule
-  PLUGIN_NAME = "discourse-plugin-name"
+enabled_site_setting :discourse_memberlist_enabled
+
+register_asset "stylesheets/common/discourse-memberlist.scss"
+
+module ::DiscourseMemberlist
+  PLUGIN_NAME = "discourse-memberlist"
 end
 
-require_relative "lib/my_plugin_module/engine"
+require_relative "lib/discourse_memberlist/engine"
 
 after_initialize do
-  # Code which should run after Rails has finished booting
+  # Plugin boot is handled by the isolated engine and controller files.
 end

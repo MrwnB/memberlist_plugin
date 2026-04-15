@@ -1,1 +1,3 @@
 en:
+  site_settings:
+    discourse_memberlist_enabled: "Enable the public memberlist page and navigation item."

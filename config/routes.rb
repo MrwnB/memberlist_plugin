@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-MyPluginModule::Engine.routes.draw do
-  get "/examples" => "examples#index"
-  # define routes here
+DiscourseMemberlist::Engine.routes.draw do
+  get "/memberlist-data" => "memberlist#index"
 end
 
-Discourse::Application.routes.draw { mount ::MyPluginModule::Engine, at: "my-plugin" }
+Discourse::Application.routes.draw do
+  get "/memberlist" => "list#latest"
+  mount ::DiscourseMemberlist::Engine, at: "/"
+end

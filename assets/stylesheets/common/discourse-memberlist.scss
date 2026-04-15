@@ -1,0 +1,160 @@
+.discourse-memberlist-page {
+  width: min(100%, 1110px);
+  margin: 0 auto;
+  padding: 0 1rem 2em;
+  box-sizing: border-box;
+}
+
+.discourse-memberlist-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+  padding: 1.5em;
+  border-radius: 1em;
+  border: 1px solid rgb(var(--primary-rgb), 0.08);
+  box-shadow: 0 0 8px rgb(0, 0, 0, 0.05);
+}
+
+.discourse-memberlist-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid var(--primary-low);
+}
+
+.discourse-memberlist-hero-copy {
+  h1,
+  p {
+    margin: 0;
+  }
+
+  h1 {
+    margin-bottom: 0.25em;
+  }
+}
+
+.discourse-memberlist-eyebrow {
+  color: var(--tertiary);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5em !important;
+  text-transform: uppercase;
+}
+
+.discourse-memberlist-total {
+  margin: 0;
+  padding: 0.65em 1em;
+  border-radius: 999px;
+  background: var(--primary-low);
+  color: var(--primary);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.discourse-memberlist-controls {
+  .inline-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75em;
+    width: 100%;
+  }
+
+  .filter-name {
+    flex: 1 1 16rem;
+    min-width: 14rem;
+  }
+}
+
+.discourse-memberlist-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+}
+
+.discourse-memberlist-section {
+  padding: 1.25em;
+  border-radius: 0.9em;
+  border: 1px solid rgb(var(--primary-rgb), 0.08);
+  background: rgb(var(--secondary-rgb), 0.65);
+}
+
+.discourse-memberlist-section-header {
+  margin-bottom: 1em;
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  p {
+    margin-top: 0.25em;
+    color: var(--primary-medium);
+  }
+}
+
+.discourse-memberlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75em;
+}
+
+.discourse-memberlist-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  min-width: 0;
+  padding: 0.9em 1em;
+  border-radius: 0.8em;
+  border: 1px solid rgb(var(--primary-rgb), 0.08);
+  background: var(--secondary);
+}
+
+.discourse-memberlist-card-avatar {
+  flex-shrink: 0;
+}
+
+.discourse-memberlist-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  min-width: 0;
+}
+
+.discourse-memberlist-card-name,
+.discourse-memberlist-card-username {
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.discourse-memberlist-card-name {
+  color: var(--primary);
+  font-weight: 700;
+
+  &:hover {
+    color: var(--tertiary);
+  }
+}
+
+.discourse-memberlist-card-username,
+.discourse-memberlist-card-meta {
+  color: var(--primary-medium);
+}
+
+.discourse-memberlist-card-meta {
+  margin: 0;
+}
+
+.mobile-view {
+  .discourse-memberlist-shell,
+  .discourse-memberlist-section {
+    padding: 1em;
+  }
+
+  .discourse-memberlist-hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
