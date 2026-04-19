@@ -14,43 +14,19 @@
   box-sizing: border-box;
 }
 
+@property --memberlist-dual-border-fill {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
 @keyframes discourse-memberlist-dual-guardian-border-fill {
-  0% {
-    background: conic-gradient(
-      from -90deg,
-      rgb(138, 82, 194, 0.98) 0 100%
-    );
+  from {
+    --memberlist-dual-border-fill: 0%;
   }
 
-  25% {
-    background: conic-gradient(
-      from -90deg,
-      rgb(255, 208, 74, 0.98) 0 25%,
-      rgb(138, 82, 194, 0.98) 25% 100%
-    );
-  }
-
-  50% {
-    background: conic-gradient(
-      from -90deg,
-      rgb(255, 208, 74, 0.98) 0 50%,
-      rgb(138, 82, 194, 0.98) 50% 100%
-    );
-  }
-
-  75% {
-    background: conic-gradient(
-      from -90deg,
-      rgb(255, 208, 74, 0.98) 0 75%,
-      rgb(138, 82, 194, 0.98) 75% 100%
-    );
-  }
-
-  100% {
-    background: conic-gradient(
-      from -90deg,
-      rgb(255, 208, 74, 0.98) 0 100%
-    );
+  to {
+    --memberlist-dual-border-fill: 100%;
   }
 }
 
@@ -269,30 +245,29 @@
 }
 
 .discourse-memberlist-section-icon-shell {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  display: grid;
+  place-items: center;
+  width: 2.05rem;
+  height: 2.05rem;
   flex: 0 0 auto;
+  overflow: hidden;
+  padding: 0.24rem;
   border-radius: 999px;
-  background:
-    radial-gradient(
-      circle at 30% 30%,
-      rgb(255, 255, 255, 0.55),
-      transparent 48%
-    ),
-    rgb(var(--secondary-rgb), 0.84);
+  background: rgb(var(--secondary-rgb), 0.88);
   box-shadow:
+    inset 0 1px 0 rgb(255, 255, 255, 0.35),
     0 0 0 1px rgb(var(--primary-rgb), 0.06),
     0 6px 16px rgb(0, 0, 0, 0.06);
 }
 
 .discourse-memberlist-section-icon {
   display: block;
-  width: 1.35rem;
-  height: 1.35rem;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
+  object-position: center;
   filter: drop-shadow(0 2px 4px rgb(0, 0, 0, 0.12));
 }
 
@@ -388,50 +363,29 @@
 }
 
 .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian {
-  position: relative;
-  isolation: isolate;
   border-color: transparent;
-  background: linear-gradient(
-    180deg,
-    rgb(var(--secondary-rgb), 0.98),
-    rgb(var(--secondary-rgb), 0.92)
-  );
+
+  --memberlist-dual-border-fill: 0%;
+  background:
+    linear-gradient(
+        180deg,
+        rgb(var(--secondary-rgb), 0.98),
+        rgb(var(--secondary-rgb), 0.92)
+      )
+      padding-box,
+    conic-gradient(
+        from -90deg,
+        rgb(255, 208, 74, 0.98) 0 var(--memberlist-dual-border-fill),
+        rgb(138, 82, 194, 0.98) var(--memberlist-dual-border-fill) 100%
+      )
+      border-box;
   box-shadow:
     0 0 0 1px rgb(255, 255, 255, 0.08),
     0 0 16px rgb(138, 82, 194, 0.16),
     0 0 16px rgb(255, 208, 74, 0.16),
     var(--memberlist-card-shadow);
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    z-index: 0;
-    padding: 1px;
-    border-radius: inherit;
-    background: conic-gradient(
-      from -90deg,
-      rgb(138, 82, 194, 0.98) 0 100%
-    );
-    animation: discourse-memberlist-dual-guardian-border-fill 3.4s ease-in-out
-      infinite alternate;
-    pointer-events: none;
-    /* stylelint-disable-next-line property-no-vendor-prefix */
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    /* stylelint-disable-next-line property-no-vendor-prefix */
-    -webkit-mask-composite: xor;
-    mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    mask-composite: exclude;
-  }
-
-  > * {
-    position: relative;
-    z-index: 1;
-  }
+  animation: discourse-memberlist-dual-guardian-border-fill 2.8s
+    cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
 
   &:hover {
     box-shadow:
@@ -439,10 +393,7 @@
       0 0 22px rgb(138, 82, 194, 0.24),
       0 0 22px rgb(255, 208, 74, 0.24),
       0 14px 28px rgb(0, 0, 0, 0.08);
-
-    &::before {
-      animation-duration: 2.2s;
-    }
+    animation-duration: 2.1s;
   }
 
   .discourse-memberlist-card-avatar .avatar {
@@ -455,11 +406,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian,
-  .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian
-    .discourse-memberlist-card-avatar
-    .avatar,
-  .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian::before {
+  .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian {
     animation: none;
   }
 }
