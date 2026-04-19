@@ -17,7 +17,7 @@ module ::DiscourseMemberlist
       # memberlist shows every non-automatic closed group.
       Group
         .where(public_admission: false, automatic: false)
-        .order("groups.name ASC")
+        .order(:name)
         .distinct
         .includes(:group_users, users: :primary_group)
         .map { |group| serialize_group(group) }
@@ -25,14 +25,14 @@ module ::DiscourseMemberlist
     end
 
     def serialize_group(group)
-      owner_user_ids = group.group_users.select(&:owner?).map(&:user_id).to_set
+      owner_user_ids = group.group_users.where(owner: true).pluck(:user_id).to_set
       members =
         group
           .users
           .includes(:primary_group)
           .where(staged: false)
           .distinct
-          .order(Arel.sql("LOWER(users.username)"))
+          .order(:username_lower)
 
       serialized_members =
         members.map do |user|
