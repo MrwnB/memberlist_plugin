@@ -109,6 +109,22 @@ export default class DiscourseMemberlistPage extends Component {
     return this.filteredSections.length > 0;
   }
 
+  get primarySections() {
+    return this.filteredSections.filter((section) => !section.isReserveRank);
+  }
+
+  get reserveSections() {
+    return this.filteredSections.filter((section) => section.isReserveRank);
+  }
+
+  get hasPrimarySections() {
+    return this.primarySections.length > 0;
+  }
+
+  get hasReserveSections() {
+    return this.reserveSections.length > 0;
+  }
+
   get totalVisibleMembers() {
     return this.filteredSections.reduce(
       (memberCount, section) => memberCount + section.members.length,
@@ -193,47 +209,103 @@ export default class DiscourseMemberlistPage extends Component {
             <EmptyState @body={{this.loadError}} />
           {{else if this.hasVisibleSections}}
             <div class="discourse-memberlist-sections">
-              {{#each this.filteredSections key="key" as |group|}}
-                <section class="discourse-memberlist-section">
-                  <header class="discourse-memberlist-section-header">
-                    <h2>{{group.label}}</h2>
+              {{#if this.hasPrimarySections}}
+                {{#each this.primarySections key="key" as |group|}}
+                  <section class="discourse-memberlist-section">
+                    <header class="discourse-memberlist-section-header">
+                      <h2>{{group.label}}</h2>
+                    </header>
+
+                    <div class="discourse-memberlist-grid">
+                      {{#each group.members key="key" as |member|}}
+                        <article class="discourse-memberlist-card">
+                          <UserAvatar
+                            @user={{member}}
+                            @size="medium"
+                            @hideTitle={{true}}
+                            class="discourse-memberlist-card-avatar"
+                          />
+
+                          <div class="discourse-memberlist-card-body">
+                            <a
+                              href={{member.profileUrl}}
+                              class="discourse-memberlist-card-name trigger-user-card"
+                              data-user-card={{member.username}}
+                            >
+                              {{member.username}}
+                            </a>
+
+                            {{#if member.wiseOldManUrl}}
+                              <a
+                                href={{member.wiseOldManUrl}}
+                                class="discourse-memberlist-card-hiscores"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                              >
+                                Hiscores
+                              </a>
+                            {{/if}}
+                          </div>
+                        </article>
+                      {{/each}}
+                    </div>
+                  </section>
+                {{/each}}
+              {{/if}}
+
+              {{#if this.hasReserveSections}}
+                <section class="discourse-memberlist-reserve-block">
+                  <header class="discourse-memberlist-reserve-header">
+                    <h2>Reserve Ranks</h2>
                   </header>
 
-                  <div class="discourse-memberlist-grid">
-                    {{#each group.members key="key" as |member|}}
-                      <article class="discourse-memberlist-card">
-                        <UserAvatar
-                          @user={{member}}
-                          @size="medium"
-                          @hideTitle={{true}}
-                          class="discourse-memberlist-card-avatar"
-                        />
+                  <div class="discourse-memberlist-reserve-sections">
+                    {{#each this.reserveSections key="key" as |group|}}
+                      <section
+                        class="discourse-memberlist-section discourse-memberlist-section-reserve"
+                      >
+                        <header class="discourse-memberlist-section-header">
+                          <h2>{{group.label}}</h2>
+                        </header>
 
-                        <div class="discourse-memberlist-card-body">
-                          <a
-                            href={{member.profileUrl}}
-                            class="discourse-memberlist-card-name trigger-user-card"
-                            data-user-card={{member.username}}
-                          >
-                            {{member.username}}
-                          </a>
+                        <div class="discourse-memberlist-grid">
+                          {{#each group.members key="key" as |member|}}
+                            <article class="discourse-memberlist-card">
+                              <UserAvatar
+                                @user={{member}}
+                                @size="medium"
+                                @hideTitle={{true}}
+                                class="discourse-memberlist-card-avatar"
+                              />
 
-                          {{#if member.wiseOldManUrl}}
-                            <a
-                              href={{member.wiseOldManUrl}}
-                              class="discourse-memberlist-card-hiscores"
-                              rel="noopener noreferrer"
-                              target="_blank"
-                            >
-                              Hiscores
-                            </a>
-                          {{/if}}
+                              <div class="discourse-memberlist-card-body">
+                                <a
+                                  href={{member.profileUrl}}
+                                  class="discourse-memberlist-card-name trigger-user-card"
+                                  data-user-card={{member.username}}
+                                >
+                                  {{member.username}}
+                                </a>
+
+                                {{#if member.wiseOldManUrl}}
+                                  <a
+                                    href={{member.wiseOldManUrl}}
+                                    class="discourse-memberlist-card-hiscores"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                  >
+                                    Hiscores
+                                  </a>
+                                {{/if}}
+                              </div>
+                            </article>
+                          {{/each}}
                         </div>
-                      </article>
+                      </section>
                     {{/each}}
                   </div>
                 </section>
-              {{/each}}
+              {{/if}}
             </div>
           {{else}}
             <EmptyState

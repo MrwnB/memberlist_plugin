@@ -21,7 +21,7 @@ module ::DiscourseMemberlist
       "guardian",
       "initiate guardian",
     ].freeze
-    EXCLUDED_RANKS = ["emeritus", "retired leader"].freeze
+    RESERVE_RANKS = ["retired leader", "emeritus", "guildsman"].freeze
     RANK_ORDER_INDEX = RANK_ORDER.each_with_index.to_h.freeze
     RSN_FIELD_KEY = "rsn"
 
@@ -39,8 +39,9 @@ module ::DiscourseMemberlist
       Group
         .where(public_admission: false, automatic: false)
         .to_a
-        .reject { |group| excluded_rank?(group) }
-        .sort_by { |group| [rank_sort_order_for(group), normalized_rank_key(group_label(group))] }
+        .sort_by do |group|
+          [reserve_rank?(group) ? 1 : 0, rank_sort_order_for(group), normalized_rank_key(group_label(group))]
+        end
         .filter_map { |group| serialize_group(group) }
     end
 
@@ -56,6 +57,7 @@ module ::DiscourseMemberlist
         name: group.name,
         label: group_label(group),
         sort_order: sort_order,
+        is_reserve_rank: reserve_rank?(group),
         members:
           members.map do |user|
             {
@@ -80,16 +82,20 @@ module ::DiscourseMemberlist
 
     def rank_sort_order_for(group)
       [group.full_name, group.name].each do |value|
-        normalized_value = normalized_rank_key(value)
+        normalized_value = normalized_rank_for_sort(value)
         return RANK_ORDER_INDEX[normalized_value] if RANK_ORDER_INDEX.key?(normalized_value)
       end
 
       RANK_ORDER.length
     end
 
-    def excluded_rank?(group)
+    def normalized_rank_for_sort(value)
+      normalized_rank_key(value).gsub(/\breserve\b/, "").squeeze(" ").strip
+    end
+
+    def reserve_rank?(group)
       [group.full_name, group.name].any? do |value|
-        EXCLUDED_RANKS.include?(normalized_rank_key(value))
+        RESERVE_RANKS.include?(normalized_rank_key(value))
       end
     end
 

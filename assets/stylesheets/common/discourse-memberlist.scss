@@ -105,19 +105,19 @@
 .discourse-memberlist-sections {
   display: flex;
   flex-direction: column;
-  gap: 1.1em;
+  gap: 1.35em;
 }
 
 .discourse-memberlist-section {
   position: relative;
   overflow: hidden;
-  padding: 1.1em 1.25em;
+  padding: 0.9em;
   border-radius: 0.9em;
   border: 1px solid rgb(var(--primary-rgb), 0.08);
   background: linear-gradient(
     180deg,
-    rgb(var(--secondary-rgb), 0.82),
-    rgb(var(--secondary-rgb), 0.68)
+    rgb(var(--secondary-rgb), 0.78),
+    rgb(var(--secondary-rgb), 0.66)
   );
   box-shadow: inset 0 1px 0 rgb(255, 255, 255, 0.22);
 
@@ -150,9 +150,26 @@
   }
 }
 
+.discourse-memberlist-section-reserve {
+  background: linear-gradient(
+    180deg,
+    rgb(var(--secondary-rgb), 0.74),
+    rgb(var(--secondary-rgb), 0.62)
+  );
+}
+
 .discourse-memberlist-section-header {
-  margin-bottom: 0.75em;
+  margin-bottom: 0.7em;
+  padding: 0.8em 1rem;
   text-align: center;
+  border: 1px solid rgb(var(--primary-rgb), 0.08);
+  border-radius: 0.8em;
+  background: linear-gradient(
+    180deg,
+    rgb(var(--secondary-rgb), 0.98),
+    rgb(var(--secondary-rgb), 0.88)
+  );
+  box-shadow: inset 0 1px 0 rgb(255, 255, 255, 0.3);
 
   h2 {
     margin: 0;
@@ -166,8 +183,16 @@
 .discourse-memberlist-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 260px));
-  justify-content: flex-start;
+  justify-content: center;
   gap: 0.55em 0.75em;
+  padding: 0.95em;
+  border: 1px solid rgb(var(--primary-rgb), 0.08);
+  border-radius: 0.85em;
+  background: linear-gradient(
+    180deg,
+    rgb(var(--secondary-rgb), 0.98),
+    rgb(var(--secondary-rgb), 0.9)
+  );
 }
 
 .discourse-memberlist-card {
@@ -204,7 +229,8 @@
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
   gap: 0.28em;
   min-width: 0;
 }
@@ -256,10 +282,54 @@
   }
 }
 
+.discourse-memberlist-reserve-block {
+  padding: 1rem;
+  border: 1px solid rgb(var(--tertiary-rgb), 0.14);
+  border-radius: 1em;
+  background: linear-gradient(
+    180deg,
+    rgb(var(--tertiary-rgb), 0.08),
+    rgb(var(--secondary-rgb), 0.74)
+  );
+  box-shadow: inset 0 1px 0 rgb(255, 255, 255, 0.22);
+}
+
+.discourse-memberlist-reserve-header {
+  margin-bottom: 0.9em;
+  padding: 0.85em 1rem;
+  text-align: center;
+  border: 1px solid rgb(var(--tertiary-rgb), 0.14);
+  border-radius: 0.85em;
+  background: linear-gradient(
+    135deg,
+    rgb(var(--tertiary-rgb), 0.2),
+    rgb(var(--tertiary-rgb), 0.08)
+  );
+
+  h2 {
+    margin: 0;
+    color: var(--memberlist-accent);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}
+
+.discourse-memberlist-reserve-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
 .mobile-view {
   .discourse-memberlist-shell,
   .discourse-memberlist-section {
     padding: 1em;
+  }
+
+  .discourse-memberlist-reserve-block {
+    padding: 0.9em;
   }
 
   .discourse-memberlist-hero {
