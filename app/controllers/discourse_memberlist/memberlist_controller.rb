@@ -10,7 +10,7 @@ module ::DiscourseMemberlist
       "high council",
       "head warlord",
       "council",
-      "application manager",
+      "app manager",
       "warlord",
       "eventmaster",
       "officer",
@@ -21,6 +21,7 @@ module ::DiscourseMemberlist
       "guardian",
       "initiate guardian",
     ].freeze
+    EXCLUDED_RANKS = ["emeritus", "retired leader"].freeze
     RANK_ORDER_INDEX = RANK_ORDER.each_with_index.to_h.freeze
     RSN_FIELD_KEY = "rsn"
 
@@ -38,6 +39,7 @@ module ::DiscourseMemberlist
       Group
         .where(public_admission: false, automatic: false)
         .to_a
+        .reject { |group| excluded_rank?(group) }
         .sort_by { |group| [rank_sort_order_for(group), normalized_rank_key(group_label(group))] }
         .filter_map { |group| serialize_group(group) }
     end
@@ -61,6 +63,7 @@ module ::DiscourseMemberlist
               username: user.username,
               username_lower: user.username_lower,
               name: user.name,
+              avatar_template: user.avatar_template,
               rsn: rsn_values_by_user_id[user.id],
             }
           end,
@@ -82,6 +85,12 @@ module ::DiscourseMemberlist
       end
 
       RANK_ORDER.length
+    end
+
+    def excluded_rank?(group)
+      [group.full_name, group.name].any? do |value|
+        EXCLUDED_RANKS.include?(normalized_rank_key(value))
+      end
     end
 
     def rsn_values_by_user_id_for(members)

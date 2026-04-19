@@ -5,6 +5,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import ConditionalLoadingSpinner from "discourse/components/conditional-loading-spinner";
 import EmptyState from "discourse/components/empty-state";
+import UserAvatar from "discourse/components/user-avatar";
 import { ajax } from "discourse/lib/ajax";
 import getURL from "discourse/lib/get-url";
 import { userPath } from "discourse/lib/url";
@@ -201,24 +202,33 @@ export default class DiscourseMemberlistPage extends Component {
                   <div class="discourse-memberlist-grid">
                     {{#each group.members key="key" as |member|}}
                       <article class="discourse-memberlist-card">
-                        <a
-                          href={{member.profileUrl}}
-                          class="discourse-memberlist-card-name trigger-user-card"
-                          data-user-card={{member.username}}
-                        >
-                          {{member.username}}
-                        </a>
+                        <UserAvatar
+                          @user={{member}}
+                          @size="medium"
+                          @hideTitle={{true}}
+                          class="discourse-memberlist-card-avatar"
+                        />
 
-                        {{#if member.wiseOldManUrl}}
+                        <div class="discourse-memberlist-card-body">
                           <a
-                            href={{member.wiseOldManUrl}}
-                            class="discourse-memberlist-card-hiscores"
-                            rel="noopener noreferrer"
-                            target="_blank"
+                            href={{member.profileUrl}}
+                            class="discourse-memberlist-card-name trigger-user-card"
+                            data-user-card={{member.username}}
                           >
-                            Hiscores
+                            {{member.username}}
                           </a>
-                        {{/if}}
+
+                          {{#if member.wiseOldManUrl}}
+                            <a
+                              href={{member.wiseOldManUrl}}
+                              class="discourse-memberlist-card-hiscores"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              Hiscores
+                            </a>
+                          {{/if}}
+                        </div>
                       </article>
                     {{/each}}
                   </div>
