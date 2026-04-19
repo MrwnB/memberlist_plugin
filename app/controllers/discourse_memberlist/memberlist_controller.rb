@@ -26,6 +26,7 @@ module ::DiscourseMemberlist
     ].freeze
     RESERVE_RANKS = ["retired leader", "emeritus", "guildsman"].freeze
     MASTER_GUARDIAN_GROUP = "master guardian".freeze
+    GRAND_GUARDIAN_GROUP = "grand guardian".freeze
     RANK_ORDER_INDEX = RANK_ORDER.each_with_index.to_h.freeze
     RSN_FIELD_KEY = "rsn"
 
@@ -41,7 +42,10 @@ module ::DiscourseMemberlist
       # Intentionally ignore group/member visibility checks so the public
       # memberlist shows every non-automatic closed group.
       groups = Group.where(public_admission: false, automatic: false).to_a
-      @master_guardian_user_ids = master_guardian_user_ids_for(groups)
+      @master_guardian_user_ids =
+        special_group_user_ids_for(groups, MASTER_GUARDIAN_GROUP)
+      @grand_guardian_user_ids =
+        special_group_user_ids_for(groups, GRAND_GUARDIAN_GROUP)
 
       groups
         .sort_by do |group|
@@ -81,7 +85,8 @@ module ::DiscourseMemberlist
               name: user.name,
               avatar_template: user.avatar_template,
               rsn: rsn_values_by_user_id[user.id],
-              has_master_guardian_glow: master_guardian_member?(user)
+              has_master_guardian_glow: master_guardian_member?(user),
+              has_grand_guardian_glow: grand_guardian_member?(user)
             }
           end
       }
@@ -130,20 +135,22 @@ module ::DiscourseMemberlist
       end
     end
 
-    def master_guardian_group?(group)
-      normalized_group_names(group).include?(MASTER_GUARDIAN_GROUP)
-    end
-
     def master_guardian_member?(user)
       @master_guardian_user_ids.include?(user.id)
     end
 
-    def master_guardian_user_ids_for(groups)
-      master_guardian_group =
-        groups.find { |group| master_guardian_group?(group) }
-      return Set.new if master_guardian_group.blank?
+    def grand_guardian_member?(user)
+      @grand_guardian_user_ids.include?(user.id)
+    end
 
-      master_guardian_group.users.where(staged: false).pluck(:id).to_set
+    def special_group_user_ids_for(groups, group_name)
+      special_group =
+        groups.find do |group|
+          normalized_group_names(group).include?(group_name)
+        end
+      return Set.new if special_group.blank?
+
+      special_group.users.where(staged: false).pluck(:id).to_set
     end
 
     def rsn_values_by_user_id_for(members)

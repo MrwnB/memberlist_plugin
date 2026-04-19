@@ -31,9 +31,13 @@ RSpec.describe DiscourseMemberlist::MemberlistController do
       create_ranked_member(
         "leader",
         username: "leader_member",
-        extra_group_names: ["master_guardian"]
+        extra_group_names: ["master_guardian", "grand_guardian"]
       )
-      create_ranked_member("high_council", username: "council_member")
+      create_ranked_member(
+        "high_council",
+        username: "council_member",
+        extra_group_names: ["grand_guardian"]
+      )
       create_ranked_member("emeritus", username: "emeritus_member")
 
       get "/memberlist-data.json"
@@ -68,8 +72,28 @@ RSpec.describe DiscourseMemberlist::MemberlistController do
       ).to eq(true)
       expect(
         sections
+          .find { |section| section["label"] == "Leader" }
+          .dig("members", 0, "has_grand_guardian_glow")
+      ).to eq(true)
+      expect(
+        sections
+          .find { |section| section["label"] == "High Council" }
+          .dig("members", 0, "has_master_guardian_glow")
+      ).to eq(false)
+      expect(
+        sections
+          .find { |section| section["label"] == "High Council" }
+          .dig("members", 0, "has_grand_guardian_glow")
+      ).to eq(true)
+      expect(
+        sections
           .find { |section| section["label"] == "Founder" }
           .dig("members", 0, "has_master_guardian_glow")
+      ).to eq(false)
+      expect(
+        sections
+          .find { |section| section["label"] == "Founder" }
+          .dig("members", 0, "has_grand_guardian_glow")
       ).to eq(false)
     end
 

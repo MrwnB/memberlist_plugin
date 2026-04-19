@@ -84,6 +84,20 @@ function rankSlugForSection(section) {
   return normalizeKey(section.name || section.label).replace(/\s+/g, "-");
 }
 
+function guardianGlowClassNames(member) {
+  const classNames = [];
+
+  if (member.hasMasterGuardianGlow) {
+    classNames.push("discourse-memberlist-card--master-guardian");
+  }
+
+  if (member.hasGrandGuardianGlow) {
+    classNames.push("discourse-memberlist-card--grand-guardian");
+  }
+
+  return classNames;
+}
+
 export default class DiscourseMemberlistPage extends Component {
   @tracked filter = "";
   @tracked isLoading = true;
@@ -197,15 +211,21 @@ export default class DiscourseMemberlistPage extends Component {
                   member.hasMasterGuardianGlow ??
                     member.has_master_guardian_glow
                 );
+                const hasGrandGuardianGlow = Boolean(
+                  member.hasGrandGuardianGlow ?? member.has_grand_guardian_glow
+                );
 
                 return {
                   ...member,
                   key: member.id || member.username,
                   hasMasterGuardianGlow,
+                  hasGrandGuardianGlow,
                   cardClassName: [
                     "discourse-memberlist-card",
-                    hasMasterGuardianGlow &&
-                      "discourse-memberlist-card--master-guardian",
+                    ...guardianGlowClassNames({
+                      hasMasterGuardianGlow,
+                      hasGrandGuardianGlow,
+                    }),
                   ]
                     .filter(Boolean)
                     .join(" "),

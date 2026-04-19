@@ -4,6 +4,8 @@
   --memberlist-accent-softer: rgb(var(--tertiary-rgb), 0.05);
   --memberlist-master-guardian-glow: rgb(138, 82, 194, 0.35);
   --memberlist-master-guardian-glow-strong: rgb(138, 82, 194, 0.6);
+  --memberlist-grand-guardian-glow: rgb(255, 208, 74, 0.35);
+  --memberlist-grand-guardian-glow-strong: rgb(255, 208, 74, 0.62);
   --memberlist-card-shadow: 0 10px 24px rgb(0, 0, 0, 0.06);
   --memberlist-shell-shadow: 0 20px 48px rgb(0, 0, 0, 0.08);
   width: min(100%, 1110px);
@@ -281,6 +283,74 @@
     box-shadow:
       0 0 0 2px rgb(138, 82, 194, 0.22),
       0 0 16px rgb(138, 82, 194, 0.28);
+  }
+}
+
+.discourse-memberlist-card--grand-guardian {
+  border-color: rgb(255, 208, 74, 0.42);
+  background: linear-gradient(
+    180deg,
+    rgb(255, 208, 74, 0.12),
+    rgb(var(--secondary-rgb), 0.96)
+  );
+  box-shadow:
+    0 0 0 1px rgb(255, 208, 74, 0.16),
+    0 0 18px var(--memberlist-grand-guardian-glow),
+    var(--memberlist-card-shadow);
+
+  &:hover {
+    border-color: rgb(255, 208, 74, 0.62);
+    box-shadow:
+      0 0 0 1px rgb(255, 208, 74, 0.22),
+      0 0 24px var(--memberlist-grand-guardian-glow-strong),
+      0 14px 28px rgb(0, 0, 0, 0.08);
+  }
+
+  .discourse-memberlist-card-avatar .avatar {
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 2px rgb(255, 208, 74, 0.22),
+      0 0 16px rgb(255, 208, 74, 0.28);
+  }
+}
+
+.discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian {
+  border-color: transparent;
+  background:
+    linear-gradient(
+        180deg,
+        rgb(138, 82, 194, 0.09),
+        rgb(255, 208, 74, 0.08) 42%,
+        rgb(var(--secondary-rgb), 0.96)
+      )
+      padding-box,
+    linear-gradient(
+        90deg,
+        rgb(138, 82, 194, 0.72) 0 50%,
+        rgb(255, 208, 74, 0.84) 50% 100%
+      )
+      border-box;
+  box-shadow:
+    0 0 0 1px rgb(255, 255, 255, 0.08),
+    0 0 18px var(--memberlist-master-guardian-glow),
+    0 0 18px var(--memberlist-grand-guardian-glow),
+    var(--memberlist-card-shadow);
+
+  &:hover {
+    border-color: transparent;
+    box-shadow:
+      0 0 0 1px rgb(255, 255, 255, 0.12),
+      0 0 24px var(--memberlist-master-guardian-glow-strong),
+      0 0 24px var(--memberlist-grand-guardian-glow-strong),
+      0 14px 28px rgb(0, 0, 0, 0.08);
+  }
+
+  .discourse-memberlist-card-avatar .avatar {
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 2px rgb(255, 255, 255, 0.18),
+      -4px 0 14px rgb(138, 82, 194, 0.34),
+      4px 0 14px rgb(255, 208, 74, 0.34);
   }
 }
 
