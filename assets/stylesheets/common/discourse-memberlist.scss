@@ -14,19 +14,62 @@
   box-sizing: border-box;
 }
 
-@keyframes discourse-memberlist-dual-guardian-border-sheen {
+@keyframes discourse-memberlist-dual-guardian-aura {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 1px 0 rgb(255, 255, 255, 0.22),
+      0 0 0 1px rgb(138, 82, 194, 0.16),
+      0 0 22px rgb(138, 82, 194, 0.18),
+      0 0 14px rgb(255, 208, 74, 0.08),
+      var(--memberlist-card-shadow);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 1px 0 rgb(255, 255, 255, 0.22),
+      0 0 0 1px rgb(255, 208, 74, 0.16),
+      0 0 22px rgb(255, 208, 74, 0.18),
+      0 0 14px rgb(138, 82, 194, 0.08),
+      var(--memberlist-card-shadow);
+  }
+}
+
+@keyframes discourse-memberlist-dual-guardian-ring-color {
+  0%,
+  100% {
+    background-color: rgb(138, 82, 194, 0.96);
+  }
+
+  50% {
+    background-color: rgb(255, 208, 74, 0.96);
+  }
+}
+
+@keyframes discourse-memberlist-dual-guardian-sheen {
   from {
-    background-position:
-      0 0,
-      0 0,
-      0% 50%;
+    background-position: -160% 50%;
   }
 
   to {
-    background-position:
-      0 0,
-      0 0,
-      200% 50%;
+    background-position: 160% 50%;
+  }
+}
+
+@keyframes discourse-memberlist-dual-guardian-avatar-aura {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 2px rgb(138, 82, 194, 0.2),
+      0 0 14px rgb(138, 82, 194, 0.24),
+      0 0 8px rgb(255, 208, 74, 0.08);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 2px rgb(255, 208, 74, 0.2),
+      0 0 14px rgb(255, 208, 74, 0.24),
+      0 0 8px rgb(138, 82, 194, 0.08);
   }
 }
 
@@ -360,6 +403,8 @@
 }
 
 .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian {
+  position: relative;
+  isolation: isolate;
   border-color: transparent;
   background:
     linear-gradient(
@@ -374,54 +419,91 @@
         rgb(var(--secondary-rgb), 0.985),
         rgb(var(--secondary-rgb), 0.92)
       )
-      padding-box,
-    linear-gradient(
-        115deg,
-        rgb(138, 82, 194, 0.98) 0%,
-        rgb(255, 208, 74, 0.98) 22%,
-        rgb(138, 82, 194, 0.98) 46%,
-        rgb(255, 208, 74, 0.98) 72%,
-        rgb(138, 82, 194, 0.98) 100%
-      )
-      border-box;
-  background-repeat: no-repeat;
-  background-size:
-    100% 100%,
-    100% 100%,
-    220% 100%;
-  background-position:
-    0 0,
-    0 0,
-    0% 50%;
+      padding-box;
   box-shadow:
     inset 0 1px 0 rgb(255, 255, 255, 0.22),
-    0 0 0 1px rgb(255, 255, 255, 0.08),
-    0 0 18px rgb(138, 82, 194, 0.18),
-    0 0 18px rgb(255, 208, 74, 0.18),
+    0 0 0 1px rgb(138, 82, 194, 0.16),
+    0 0 22px rgb(138, 82, 194, 0.18),
+    0 0 14px rgb(255, 208, 74, 0.08),
     var(--memberlist-card-shadow);
-  animation: discourse-memberlist-dual-guardian-border-sheen 6.4s linear infinite;
+  animation: discourse-memberlist-dual-guardian-aura 7.4s ease-in-out infinite;
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 0;
+    // stylelint-disable-next-line property-no-vendor-prefix
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    // stylelint-disable-next-line property-no-vendor-prefix
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+  }
+
+  &::before {
+    background-color: rgb(138, 82, 194, 0.96);
+    animation: discourse-memberlist-dual-guardian-ring-color 7.4s ease-in-out infinite;
+  }
+
+  &::after {
+    background: linear-gradient(
+      110deg,
+      transparent 0%,
+      transparent 34%,
+      rgb(255, 255, 255, 0.12) 44%,
+      rgb(255, 255, 255, 0.62) 50%,
+      rgb(255, 255, 255, 0.12) 56%,
+      transparent 66%,
+      transparent 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 180% 100%;
+    animation: discourse-memberlist-dual-guardian-sheen 4.8s linear infinite;
+    opacity: 0.9;
+  }
 
   &:hover {
-    box-shadow:
-      inset 0 1px 0 rgb(255, 255, 255, 0.28),
-      0 0 0 1px rgb(255, 255, 255, 0.12),
-      0 0 24px rgb(138, 82, 194, 0.24),
-      0 0 24px rgb(255, 208, 74, 0.24),
-      0 14px 28px rgb(0, 0, 0, 0.08);
+    border-color: transparent;
+    filter: brightness(1.03);
   }
 
   .discourse-memberlist-card-avatar .avatar {
     border-radius: 50%;
     box-shadow:
-      0 0 0 2px rgb(255, 255, 255, 0.16),
-      0 0 12px rgb(138, 82, 194, 0.24),
-      0 0 12px rgb(255, 208, 74, 0.24);
+      0 0 0 2px rgb(138, 82, 194, 0.2),
+      0 0 14px rgb(138, 82, 194, 0.24),
+      0 0 8px rgb(255, 208, 74, 0.08);
+    animation: discourse-memberlist-dual-guardian-avatar-aura 7.4s ease-in-out
+      infinite;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian {
+  .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian,
+  .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian::before,
+  .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian::after,
+  .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian
+    .discourse-memberlist-card-avatar
+    .avatar {
     animation: none;
+  }
+
+  .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian::after {
+    opacity: 0;
   }
 }
 
