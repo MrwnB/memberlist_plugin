@@ -211,45 +211,43 @@ export default class DiscourseMemberlistPage extends Component {
             <div class="discourse-memberlist-sections">
               {{#if this.hasPrimarySections}}
                 {{#each this.primarySections key="key" as |group|}}
-                  <section class="discourse-memberlist-group">
+                  <section class="discourse-memberlist-section">
                     <header class="discourse-memberlist-section-header">
                       <h2>{{group.label}}</h2>
                     </header>
 
-                    <div class="discourse-memberlist-section">
-                      <div class="discourse-memberlist-grid">
-                        {{#each group.members key="key" as |member|}}
-                          <article class="discourse-memberlist-card">
-                            <UserAvatar
-                              @user={{member}}
-                              @size="medium"
-                              @hideTitle={{true}}
-                              class="discourse-memberlist-card-avatar"
-                            />
+                    <div class="discourse-memberlist-grid">
+                      {{#each group.members key="key" as |member|}}
+                        <article class="discourse-memberlist-card">
+                          <UserAvatar
+                            @user={{member}}
+                            @size="medium"
+                            @hideTitle={{true}}
+                            class="discourse-memberlist-card-avatar"
+                          />
 
-                            <div class="discourse-memberlist-card-body">
+                          <div class="discourse-memberlist-card-body">
+                            <a
+                              href={{member.profileUrl}}
+                              class="discourse-memberlist-card-name trigger-user-card"
+                              data-user-card={{member.username}}
+                            >
+                              {{member.username}}
+                            </a>
+
+                            {{#if member.wiseOldManUrl}}
                               <a
-                                href={{member.profileUrl}}
-                                class="discourse-memberlist-card-name trigger-user-card"
-                                data-user-card={{member.username}}
+                                href={{member.wiseOldManUrl}}
+                                class="discourse-memberlist-card-hiscores"
+                                rel="noopener noreferrer"
+                                target="_blank"
                               >
-                                {{member.username}}
+                                Hiscores
                               </a>
-
-                              {{#if member.wiseOldManUrl}}
-                                <a
-                                  href={{member.wiseOldManUrl}}
-                                  class="discourse-memberlist-card-hiscores"
-                                  rel="noopener noreferrer"
-                                  target="_blank"
-                                >
-                                  Hiscores
-                                </a>
-                              {{/if}}
-                            </div>
-                          </article>
-                        {{/each}}
-                      </div>
+                            {{/if}}
+                          </div>
+                        </article>
+                      {{/each}}
                     </div>
                   </section>
                 {{/each}}
@@ -263,47 +261,45 @@ export default class DiscourseMemberlistPage extends Component {
 
                   <div class="discourse-memberlist-reserve-sections">
                     {{#each this.reserveSections key="key" as |group|}}
-                      <section class="discourse-memberlist-group">
+                      <section
+                        class="discourse-memberlist-section discourse-memberlist-section-reserve"
+                      >
                         <header class="discourse-memberlist-section-header">
                           <h2>{{group.label}}</h2>
                         </header>
 
-                        <div
-                          class="discourse-memberlist-section discourse-memberlist-section-reserve"
-                        >
-                          <div class="discourse-memberlist-grid">
-                            {{#each group.members key="key" as |member|}}
-                              <article class="discourse-memberlist-card">
-                                <UserAvatar
-                                  @user={{member}}
-                                  @size="medium"
-                                  @hideTitle={{true}}
-                                  class="discourse-memberlist-card-avatar"
-                                />
+                        <div class="discourse-memberlist-grid">
+                          {{#each group.members key="key" as |member|}}
+                            <article class="discourse-memberlist-card">
+                              <UserAvatar
+                                @user={{member}}
+                                @size="medium"
+                                @hideTitle={{true}}
+                                class="discourse-memberlist-card-avatar"
+                              />
 
-                                <div class="discourse-memberlist-card-body">
+                              <div class="discourse-memberlist-card-body">
+                                <a
+                                  href={{member.profileUrl}}
+                                  class="discourse-memberlist-card-name trigger-user-card"
+                                  data-user-card={{member.username}}
+                                >
+                                  {{member.username}}
+                                </a>
+
+                                {{#if member.wiseOldManUrl}}
                                   <a
-                                    href={{member.profileUrl}}
-                                    class="discourse-memberlist-card-name trigger-user-card"
-                                    data-user-card={{member.username}}
+                                    href={{member.wiseOldManUrl}}
+                                    class="discourse-memberlist-card-hiscores"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
                                   >
-                                    {{member.username}}
+                                    Hiscores
                                   </a>
-
-                                  {{#if member.wiseOldManUrl}}
-                                    <a
-                                      href={{member.wiseOldManUrl}}
-                                      class="discourse-memberlist-card-hiscores"
-                                      rel="noopener noreferrer"
-                                      target="_blank"
-                                    >
-                                      Hiscores
-                                    </a>
-                                  {{/if}}
-                                </div>
-                              </article>
-                            {{/each}}
-                          </div>
+                                {{/if}}
+                              </div>
+                            </article>
+                          {{/each}}
                         </div>
                       </section>
                     {{/each}}

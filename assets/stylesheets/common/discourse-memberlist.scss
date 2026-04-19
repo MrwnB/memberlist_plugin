@@ -108,12 +108,6 @@
   gap: 1.35em;
 }
 
-.discourse-memberlist-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35em;
-}
-
 .discourse-memberlist-section {
   position: relative;
   overflow: hidden;
@@ -140,8 +134,8 @@
   }
 }
 
-.discourse-memberlist-group:nth-child(3n + 2)
-  .discourse-memberlist-section::before {
+.discourse-memberlist-sections
+  > .discourse-memberlist-section:nth-child(3n + 2)::before {
   background: linear-gradient(
     180deg,
     rgb(var(--primary-rgb), 0.82),
@@ -149,8 +143,8 @@
   );
 }
 
-.discourse-memberlist-group:nth-child(3n + 3)
-  .discourse-memberlist-section::before {
+.discourse-memberlist-sections
+  > .discourse-memberlist-section:nth-child(3n + 3)::before {
   background: linear-gradient(
     180deg,
     rgb(var(--success-rgb), 0.9),
@@ -167,6 +161,7 @@
 }
 
 .discourse-memberlist-section-header {
+  margin-bottom: 0.45em;
   padding: 0.8em 1rem;
   text-align: center;
   border: 1px solid rgb(var(--primary-rgb), 0.08);
