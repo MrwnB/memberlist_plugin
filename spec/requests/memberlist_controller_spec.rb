@@ -6,12 +6,19 @@ RSpec.describe DiscourseMemberlist::MemberlistController do
     SiteSetting.discourse_memberlist_enabled = true
   end
 
-  def create_ranked_member(rank_name, username:)
-    group = Fabricate(:group, name: rank_name)
+  def find_or_create_group(group_name)
+    Group.find_by(name: group_name) || Fabricate(:group, name: group_name)
+  end
+
+  def create_ranked_member(rank_name, username:, extra_group_names: [])
+    group = find_or_create_group(rank_name)
     user = Fabricate(:user, username: username)
 
     group.add(user)
     user.update!(primary_group: group)
+    extra_group_names.each do |group_name|
+      find_or_create_group(group_name).add(user)
+    end
 
     group
   end
@@ -21,7 +28,11 @@ RSpec.describe DiscourseMemberlist::MemberlistController do
       create_ranked_member("guildsman", username: "guild_member")
       create_ranked_member("founder", username: "founder_member")
       create_ranked_member("retired_leader", username: "retired_member")
-      create_ranked_member("leader", username: "leader_member")
+      create_ranked_member(
+        "leader",
+        username: "leader_member",
+        extra_group_names: ["master_guardian"]
+      )
       create_ranked_member("high_council", username: "council_member")
       create_ranked_member("emeritus", username: "emeritus_member")
 
@@ -50,6 +61,16 @@ RSpec.describe DiscourseMemberlist::MemberlistController do
       expect(
         sections.last(3).map { |section| section["is_reserve_rank"] }
       ).to eq([true, true, true])
+      expect(
+        sections
+          .find { |section| section["label"] == "Leader" }
+          .dig("members", 0, "has_master_guardian_glow")
+      ).to eq(true)
+      expect(
+        sections
+          .find { |section| section["label"] == "Founder" }
+          .dig("members", 0, "has_master_guardian_glow")
+      ).to eq(false)
     end
 
     it "returns 404 when the feature is disabled" do

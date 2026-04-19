@@ -25,6 +25,7 @@ module ::DiscourseMemberlist
       "guildsman"
     ].freeze
     RESERVE_RANKS = ["retired leader", "emeritus", "guildsman"].freeze
+    MASTER_GUARDIAN_GROUP = "master guardian".freeze
     RANK_ORDER_INDEX = RANK_ORDER.each_with_index.to_h.freeze
     RSN_FIELD_KEY = "rsn"
 
@@ -39,9 +40,10 @@ module ::DiscourseMemberlist
 
       # Intentionally ignore group/member visibility checks so the public
       # memberlist shows every non-automatic closed group.
-      Group
-        .where(public_admission: false, automatic: false)
-        .to_a
+      groups = Group.where(public_admission: false, automatic: false).to_a
+      @master_guardian_user_ids = master_guardian_user_ids_for(groups)
+
+      groups
         .sort_by do |group|
           [
             group_bucket(group),
@@ -78,7 +80,8 @@ module ::DiscourseMemberlist
               username_lower: user.username_lower,
               name: user.name,
               avatar_template: user.avatar_template,
-              rsn: rsn_values_by_user_id[user.id]
+              rsn: rsn_values_by_user_id[user.id],
+              has_master_guardian_glow: master_guardian_member?(user)
             }
           end
       }
@@ -125,6 +128,22 @@ module ::DiscourseMemberlist
       normalized_group_names(group).any? do |value|
         RESERVE_RANKS.include?(value)
       end
+    end
+
+    def master_guardian_group?(group)
+      normalized_group_names(group).include?(MASTER_GUARDIAN_GROUP)
+    end
+
+    def master_guardian_member?(user)
+      @master_guardian_user_ids.include?(user.id)
+    end
+
+    def master_guardian_user_ids_for(groups)
+      master_guardian_group =
+        groups.find { |group| master_guardian_group?(group) }
+      return Set.new if master_guardian_group.blank?
+
+      master_guardian_group.users.where(staged: false).pluck(:id).to_set
     end
 
     def rsn_values_by_user_id_for(members)

@@ -6,6 +6,7 @@ import { action } from "@ember/object";
 import ConditionalLoadingSpinner from "discourse/components/conditional-loading-spinner";
 import EmptyState from "discourse/components/empty-state";
 import UserAvatar from "discourse/components/user-avatar";
+import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import getURL from "discourse/lib/get-url";
 import { userPath } from "discourse/lib/url";
@@ -35,6 +36,20 @@ function wiseOldManUrlForRsn(rsn) {
   }
 
   return `https://wiseoldman.net/players/${encodeURIComponent(cleanRsn)}`;
+}
+
+function oldSchoolHiscoresUrlForRsn(rsn) {
+  const cleanRsn = cleanString(rsn);
+
+  if (!cleanRsn) {
+    return null;
+  }
+
+  return `https://secure.runescape.com/m=hiscore_oldschool/hiscorepersonal.ws?${new URLSearchParams(
+    {
+      user1: cleanRsn,
+    }
+  ).toString()}`;
 }
 
 function compareMembers(leftMember, rightMember) {
@@ -174,14 +189,30 @@ export default class DiscourseMemberlistPage extends Component {
               .join(" "),
             sortOrder: section.sort_order ?? Number.MAX_SAFE_INTEGER,
             members: (section.members || [])
-              .map((member) => ({
-                ...member,
-                key: member.id || member.username,
-                profileUrl: getURL(
-                  userPath(member.username_lower || member.username)
-                ),
-                wiseOldManUrl: wiseOldManUrlForRsn(member.rsn),
-              }))
+              .map((member) => {
+                const hasMasterGuardianGlow = Boolean(
+                  member.hasMasterGuardianGlow ??
+                    member.has_master_guardian_glow
+                );
+
+                return {
+                  ...member,
+                  key: member.id || member.username,
+                  hasMasterGuardianGlow,
+                  cardClassName: [
+                    "discourse-memberlist-card",
+                    hasMasterGuardianGlow &&
+                      "discourse-memberlist-card--master-guardian",
+                  ]
+                    .filter(Boolean)
+                    .join(" "),
+                  profileUrl: getURL(
+                    userPath(member.username_lower || member.username)
+                  ),
+                  wiseOldManUrl: wiseOldManUrlForRsn(member.rsn),
+                  oldSchoolHiscoresUrl: oldSchoolHiscoresUrlForRsn(member.rsn),
+                };
+              })
               .sort(compareMembers),
           };
         })
@@ -238,7 +269,7 @@ export default class DiscourseMemberlistPage extends Component {
 
                     <div class="discourse-memberlist-grid">
                       {{#each group.members key="key" as |member|}}
-                        <article class="discourse-memberlist-card">
+                        <article class={{member.cardClassName}}>
                           <UserAvatar
                             @user={{member}}
                             @size="medium"
@@ -247,24 +278,48 @@ export default class DiscourseMemberlistPage extends Component {
                           />
 
                           <div class="discourse-memberlist-card-body">
-                            <a
-                              href={{member.profileUrl}}
-                              class="discourse-memberlist-card-name trigger-user-card"
-                              data-user-card={{member.username}}
-                            >
-                              {{member.username}}
-                            </a>
-
-                            {{#if member.wiseOldManUrl}}
+                            <div class="discourse-memberlist-card-identity">
                               <a
-                                href={{member.wiseOldManUrl}}
-                                class="discourse-memberlist-card-hiscores"
-                                rel="noopener noreferrer"
-                                target="_blank"
+                                href={{member.profileUrl}}
+                                class="discourse-memberlist-card-name trigger-user-card"
+                                data-user-card={{member.username}}
                               >
-                                Hiscores
+                                {{member.username}}
                               </a>
-                            {{/if}}
+
+                              <div class="discourse-memberlist-card-links">
+                                {{#if member.wiseOldManUrl}}
+                                  <a
+                                    href={{member.wiseOldManUrl}}
+                                    class="discourse-memberlist-card-link discourse-memberlist-card-link--wom"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    aria-label="Wise Old Man profile"
+                                    title="Wise Old Man profile"
+                                  >
+                                    <span
+                                      class="discourse-memberlist-card-link-badge"
+                                      aria-hidden="true"
+                                    >
+                                      W
+                                    </span>
+                                  </a>
+                                {{/if}}
+
+                                {{#if member.oldSchoolHiscoresUrl}}
+                                  <a
+                                    href={{member.oldSchoolHiscoresUrl}}
+                                    class="discourse-memberlist-card-link discourse-memberlist-card-link--osrs"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    aria-label="Old School RuneScape HiScores"
+                                    title="Old School RuneScape HiScores"
+                                  >
+                                    {{icon "chart-bar"}}
+                                  </a>
+                                {{/if}}
+                              </div>
+                            </div>
                           </div>
                         </article>
                       {{/each}}
@@ -288,7 +343,7 @@ export default class DiscourseMemberlistPage extends Component {
 
                         <div class="discourse-memberlist-grid">
                           {{#each group.members key="key" as |member|}}
-                            <article class="discourse-memberlist-card">
+                            <article class={{member.cardClassName}}>
                               <UserAvatar
                                 @user={{member}}
                                 @size="medium"
@@ -297,24 +352,48 @@ export default class DiscourseMemberlistPage extends Component {
                               />
 
                               <div class="discourse-memberlist-card-body">
-                                <a
-                                  href={{member.profileUrl}}
-                                  class="discourse-memberlist-card-name trigger-user-card"
-                                  data-user-card={{member.username}}
-                                >
-                                  {{member.username}}
-                                </a>
-
-                                {{#if member.wiseOldManUrl}}
+                                <div class="discourse-memberlist-card-identity">
                                   <a
-                                    href={{member.wiseOldManUrl}}
-                                    class="discourse-memberlist-card-hiscores"
-                                    rel="noopener noreferrer"
-                                    target="_blank"
+                                    href={{member.profileUrl}}
+                                    class="discourse-memberlist-card-name trigger-user-card"
+                                    data-user-card={{member.username}}
                                   >
-                                    Hiscores
+                                    {{member.username}}
                                   </a>
-                                {{/if}}
+
+                                  <div class="discourse-memberlist-card-links">
+                                    {{#if member.wiseOldManUrl}}
+                                      <a
+                                        href={{member.wiseOldManUrl}}
+                                        class="discourse-memberlist-card-link discourse-memberlist-card-link--wom"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        aria-label="Wise Old Man profile"
+                                        title="Wise Old Man profile"
+                                      >
+                                        <span
+                                          class="discourse-memberlist-card-link-badge"
+                                          aria-hidden="true"
+                                        >
+                                          W
+                                        </span>
+                                      </a>
+                                    {{/if}}
+
+                                    {{#if member.oldSchoolHiscoresUrl}}
+                                      <a
+                                        href={{member.oldSchoolHiscoresUrl}}
+                                        class="discourse-memberlist-card-link discourse-memberlist-card-link--osrs"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        aria-label="Old School RuneScape HiScores"
+                                        title="Old School RuneScape HiScores"
+                                      >
+                                        {{icon "chart-bar"}}
+                                      </a>
+                                    {{/if}}
+                                  </div>
+                                </div>
                               </div>
                             </article>
                           {{/each}}

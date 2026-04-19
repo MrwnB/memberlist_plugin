@@ -2,6 +2,8 @@
   --memberlist-accent: rgb(var(--tertiary-rgb), 0.95);
   --memberlist-accent-soft: rgb(var(--tertiary-rgb), 0.1);
   --memberlist-accent-softer: rgb(var(--tertiary-rgb), 0.05);
+  --memberlist-master-guardian-glow: rgb(138, 82, 194, 0.35);
+  --memberlist-master-guardian-glow-strong: rgb(138, 82, 194, 0.6);
   --memberlist-card-shadow: 0 10px 24px rgb(0, 0, 0, 0.06);
   --memberlist-shell-shadow: 0 20px 48px rgb(0, 0, 0, 0.08);
   width: min(100%, 1110px);
@@ -262,6 +264,34 @@
   }
 }
 
+.discourse-memberlist-card--master-guardian {
+  border-color: rgb(138, 82, 194, 0.35);
+  background: linear-gradient(
+    180deg,
+    rgb(138, 82, 194, 0.1),
+    rgb(var(--secondary-rgb), 0.96)
+  );
+  box-shadow:
+    0 0 0 1px rgb(138, 82, 194, 0.12),
+    0 0 18px var(--memberlist-master-guardian-glow),
+    var(--memberlist-card-shadow);
+
+  &:hover {
+    border-color: rgb(138, 82, 194, 0.55);
+    box-shadow:
+      0 0 0 1px rgb(138, 82, 194, 0.18),
+      0 0 24px var(--memberlist-master-guardian-glow-strong),
+      0 14px 28px rgb(0, 0, 0, 0.08);
+  }
+
+  .discourse-memberlist-card-avatar .avatar {
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 2px rgb(138, 82, 194, 0.22),
+      0 0 16px rgb(138, 82, 194, 0.28);
+  }
+}
+
 .discourse-memberlist-card-avatar {
   flex: 0 0 auto;
 }
@@ -272,14 +302,16 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.28em;
   min-width: 0;
 }
 
-.discourse-memberlist-card-name,
-.discourse-memberlist-card-hiscores {
-  overflow-wrap: anywhere;
-  text-decoration: none;
+.discourse-memberlist-card-identity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .discourse-memberlist-card-name {
@@ -287,6 +319,8 @@
   font-weight: 700;
   min-width: 0;
   line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-decoration: none;
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.16em;
 
@@ -302,25 +336,86 @@
   }
 }
 
-.discourse-memberlist-card-hiscores {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--memberlist-accent);
-  font-size: 0.82rem;
-  font-weight: 700;
-  line-height: 1.2;
-  text-decoration-thickness: 0.08em;
-  text-underline-offset: 0.14em;
+.discourse-memberlist-card-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex: 0 0 auto;
+}
+
+.discourse-memberlist-card-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--primary-rgb), 0.08);
+  background: rgb(var(--secondary-rgb), 0.92);
+  color: var(--primary);
+  text-decoration: none;
+  box-shadow: 0 6px 14px rgb(0, 0, 0, 0.07);
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease;
 
   &:hover {
-    text-decoration: underline;
+    transform: translateY(-1px);
   }
 
   &:focus-visible {
     outline: 2px solid rgb(var(--tertiary-rgb), 0.45);
     outline-offset: 2px;
+    border-radius: 999px;
   }
+
+  .d-icon {
+    font-size: 0.78rem;
+  }
+}
+
+.discourse-memberlist-card-link-badge {
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.discourse-memberlist-card-link--wom {
+  border-color: rgb(46, 139, 201, 0.18);
+  background: linear-gradient(135deg, #34a6f4, #0d6fe7);
+  color: white;
+}
+
+.discourse-memberlist-card-link--osrs {
+  border-color: rgb(143, 106, 41, 0.2);
+  background: linear-gradient(135deg, #f3ca63, #b67b1b);
+  color: #3f2612;
+}
+
+.discourse-memberlist-card--master-guardian .discourse-memberlist-card-link {
+  box-shadow:
+    0 0 0 1px rgb(138, 82, 194, 0.08),
+    0 8px 18px rgb(138, 82, 194, 0.16);
+}
+
+.discourse-memberlist-card-link--wom:hover,
+.discourse-memberlist-card-link--osrs:hover {
+  box-shadow: 0 10px 18px rgb(0, 0, 0, 0.12);
+}
+
+.discourse-memberlist-card-link--wom:hover {
+  border-color: rgb(52, 166, 244, 0.55);
+}
+
+.discourse-memberlist-card-link--osrs:hover {
+  border-color: rgb(182, 123, 27, 0.5);
+}
+
+.discourse-memberlist-card-link--osrs .d-icon {
+  font-size: 0.72rem;
 }
 
 .discourse-memberlist-reserve-block {
