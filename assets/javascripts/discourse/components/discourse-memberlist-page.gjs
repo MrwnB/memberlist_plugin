@@ -26,10 +26,6 @@ function normalizeKey(value) {
     .replace(/[_\s-]+/g, " ");
 }
 
-function displayNameForUser(user) {
-  return cleanString(user?.name) || cleanString(user?.username) || "";
-}
-
 function wiseOldManUrlForRsn(rsn) {
   const cleanRsn = cleanString(rsn);
 
@@ -41,10 +37,7 @@ function wiseOldManUrlForRsn(rsn) {
 }
 
 function compareMembers(leftMember, rightMember) {
-  return (
-    collator.compare(leftMember.displayName, rightMember.displayName) ||
-    collator.compare(leftMember.username, rightMember.username)
-  );
+  return collator.compare(leftMember.username, rightMember.username);
 }
 
 function compareSections(leftSection, rightSection) {
@@ -148,7 +141,6 @@ export default class DiscourseMemberlistPage extends Component {
             .map((member) => ({
               ...member,
               key: member.id || member.username,
-              displayName: displayNameForUser(member),
               profileUrl: getURL(
                 userPath(member.username_lower || member.username)
               ),
@@ -203,36 +195,33 @@ export default class DiscourseMemberlistPage extends Component {
               {{#each this.filteredSections key="key" as |group|}}
                 <section class="discourse-memberlist-section">
                   <header class="discourse-memberlist-section-header">
-                    <div>
-                      <h2>{{group.label}}</h2>
-                      <p>{{group.members.length}} members</p>
-                    </div>
+                    <h2>{{group.label}}</h2>
                   </header>
 
-                  <ul class="discourse-memberlist-members">
+                  <div class="discourse-memberlist-grid">
                     {{#each group.members key="key" as |member|}}
-                      <li class="discourse-memberlist-member">
+                      <article class="discourse-memberlist-card">
                         <a
                           href={{member.profileUrl}}
-                          class="discourse-memberlist-member-link trigger-user-card"
+                          class="discourse-memberlist-card-name trigger-user-card"
                           data-user-card={{member.username}}
                         >
-                          {{member.displayName}}
+                          {{member.username}}
                         </a>
 
                         {{#if member.wiseOldManUrl}}
                           <a
                             href={{member.wiseOldManUrl}}
-                            class="discourse-memberlist-member-hiscores"
+                            class="discourse-memberlist-card-hiscores"
                             rel="noopener noreferrer"
                             target="_blank"
                           >
                             Hiscores
                           </a>
                         {{/if}}
-                      </li>
+                      </article>
                     {{/each}}
-                  </ul>
+                  </div>
                 </section>
               {{/each}}
             </div>
