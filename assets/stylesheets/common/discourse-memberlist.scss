@@ -14,9 +14,43 @@
   box-sizing: border-box;
 }
 
-@keyframes discourse-memberlist-dual-guardian-border-spin {
+@keyframes discourse-memberlist-dual-guardian-border-fill {
+  0% {
+    background: conic-gradient(
+      from -90deg,
+      rgb(138, 82, 194, 0.98) 0 100%
+    );
+  }
+
+  25% {
+    background: conic-gradient(
+      from -90deg,
+      rgb(255, 208, 74, 0.98) 0 25%,
+      rgb(138, 82, 194, 0.98) 25% 100%
+    );
+  }
+
+  50% {
+    background: conic-gradient(
+      from -90deg,
+      rgb(255, 208, 74, 0.98) 0 50%,
+      rgb(138, 82, 194, 0.98) 50% 100%
+    );
+  }
+
+  75% {
+    background: conic-gradient(
+      from -90deg,
+      rgb(255, 208, 74, 0.98) 0 75%,
+      rgb(138, 82, 194, 0.98) 75% 100%
+    );
+  }
+
   100% {
-    transform: rotate(1turn);
+    background: conic-gradient(
+      from -90deg,
+      rgb(255, 208, 74, 0.98) 0 100%
+    );
   }
 }
 
@@ -376,13 +410,11 @@
     padding: 1px;
     border-radius: inherit;
     background: conic-gradient(
-      from 0deg,
-      rgb(138, 82, 194, 0.98),
-      rgb(255, 208, 74, 0.98),
-      rgb(138, 82, 194, 0.98)
+      from -90deg,
+      rgb(138, 82, 194, 0.98) 0 100%
     );
-    animation: discourse-memberlist-dual-guardian-border-spin 2.2s linear
-      infinite;
+    animation: discourse-memberlist-dual-guardian-border-fill 3.4s ease-in-out
+      infinite alternate;
     pointer-events: none;
     /* stylelint-disable-next-line property-no-vendor-prefix */
     -webkit-mask:
@@ -409,7 +441,7 @@
       0 14px 28px rgb(0, 0, 0, 0.08);
 
     &::before {
-      animation-duration: 1.55s;
+      animation-duration: 2.2s;
     }
   }
 
@@ -479,15 +511,20 @@
 .discourse-memberlist-card-links {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.35rem;
   flex: 0 0 auto;
+  overflow: visible;
+  line-height: 0;
 }
 
 .discourse-memberlist-card-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  flex: 0 0 auto;
+  padding: 0.04rem 0;
+  overflow: visible;
+  line-height: 0;
   text-decoration: none;
   transition:
     transform 0.16s ease,
@@ -507,9 +544,19 @@
 
 .discourse-memberlist-card-link-image {
   display: block;
-  width: 1.1rem;
-  height: 1.1rem;
+  width: auto;
+  max-width: none;
+  height: 1rem;
   object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgb(0, 0, 0, 0.14));
+}
+
+.discourse-memberlist-card-link--wom .discourse-memberlist-card-link-image {
+  height: 1.18rem;
+}
+
+.discourse-memberlist-card-link--osrs .discourse-memberlist-card-link-image {
+  height: 0.98rem;
 }
 
 .discourse-memberlist-reserve-block {
