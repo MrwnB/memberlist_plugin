@@ -20,9 +20,9 @@ module ::DiscourseMemberlist
       "honoured guardian",
       "guardian",
       "initiate guardian",
-      "retired leader,
-      "emeritus",
-      "guildsman"
+      "retired leader", 
+      "emeritus", 
+      "guildsman",
     ].freeze
     RESERVE_RANKS = ["retired leader", "emeritus", "guildsman"].freeze
     RANK_ORDER_INDEX = RANK_ORDER.each_with_index.to_h.freeze
