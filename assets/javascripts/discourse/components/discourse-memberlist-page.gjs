@@ -5,7 +5,6 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import ConditionalLoadingSpinner from "discourse/components/conditional-loading-spinner";
 import EmptyState from "discourse/components/empty-state";
-import UserAvatar from "discourse/components/user-avatar";
 import { ajax } from "discourse/lib/ajax";
 import getURL from "discourse/lib/get-url";
 import { userPath } from "discourse/lib/url";
@@ -31,27 +30,14 @@ function displayNameForUser(user) {
   return cleanString(user?.name) || cleanString(user?.username) || "";
 }
 
-function secondaryLabelForMember(member, groupLabel) {
-  const labels = [];
-  const title = cleanString(member.title);
-  const primaryGroupName = cleanString(member.primary_group_name);
+function wiseOldManUrlForRsn(rsn) {
+  const cleanRsn = cleanString(rsn);
 
-  if (member.owner) {
-    labels.push("Group owner");
+  if (!cleanRsn) {
+    return null;
   }
 
-  if (title) {
-    labels.push(title);
-  }
-
-  if (
-    primaryGroupName &&
-    normalizeKey(primaryGroupName) !== normalizeKey(groupLabel)
-  ) {
-    labels.push(primaryGroupName);
-  }
-
-  return [...new Set(labels)].slice(0, 2).join(" / ") || null;
+  return `https://wiseoldman.net/players/${encodeURIComponent(cleanRsn)}`;
 }
 
 function compareMembers(leftMember, rightMember) {
@@ -62,7 +48,11 @@ function compareMembers(leftMember, rightMember) {
 }
 
 function compareSections(leftSection, rightSection) {
-  return collator.compare(leftSection.label, rightSection.label);
+  return (
+    (leftSection.sortOrder ?? Number.MAX_SAFE_INTEGER) -
+      (rightSection.sortOrder ?? Number.MAX_SAFE_INTEGER) ||
+    collator.compare(leftSection.label, rightSection.label)
+  );
 }
 
 function memberMatchesFilter(member, filterValue) {
@@ -70,12 +60,7 @@ function memberMatchesFilter(member, filterValue) {
     return true;
   }
 
-  const searchableValue = [
-    member.username,
-    member.name,
-    member.title,
-    member.primary_group_name,
-  ]
+  const searchableValue = [member.username, member.name, member.rsn]
     .map((value) => normalizeKey(value))
     .filter(Boolean)
     .join(" ");
@@ -158,6 +143,7 @@ export default class DiscourseMemberlistPage extends Component {
         .map((section) => ({
           ...section,
           key: section.id || section.name,
+          sortOrder: section.sort_order ?? Number.MAX_SAFE_INTEGER,
           members: (section.members || [])
             .map((member) => ({
               ...member,
@@ -166,7 +152,7 @@ export default class DiscourseMemberlistPage extends Component {
               profileUrl: getURL(
                 userPath(member.username_lower || member.username)
               ),
-              secondaryLabel: secondaryLabelForMember(member, section.label),
+              wiseOldManUrl: wiseOldManUrlForRsn(member.rsn),
             }))
             .sort(compareMembers),
         }))
@@ -185,13 +171,13 @@ export default class DiscourseMemberlistPage extends Component {
           <div class="discourse-memberlist-hero-copy">
             <p class="discourse-memberlist-eyebrow">Community memberlist</p>
             <h1>Memberlist</h1>
-            <p>Browse every closed group and the members inside each one.</p>
+            <p>Browse members by their primary rank and jump to profiles fast.</p>
           </div>
 
           {{#if this.hasVisibleSections}}
             <p class="discourse-memberlist-total">
               {{this.visibleGroupCount}}
-              groups /
+              ranks /
               {{this.totalVisibleMembers}}
               members
             </p>
@@ -202,7 +188,7 @@ export default class DiscourseMemberlistPage extends Component {
           <div class="inline-form">
             <Input
               @value={{this.filter}}
-              placeholder="Filter groups or members"
+              placeholder="Filter ranks, members, or RSNs"
               class="filter-name no-blur"
               {{on "input" this.updateFilter}}
             />
@@ -223,41 +209,30 @@ export default class DiscourseMemberlistPage extends Component {
                     </div>
                   </header>
 
-                  <div class="discourse-memberlist-grid">
+                  <ul class="discourse-memberlist-members">
                     {{#each group.members key="key" as |member|}}
-                      <article class="discourse-memberlist-card">
-                        <UserAvatar
-                          @user={{member}}
-                          @size="large"
-                          @hideTitle={{true}}
-                          class="discourse-memberlist-card-avatar"
-                        />
+                      <li class="discourse-memberlist-member">
+                        <a
+                          href={{member.profileUrl}}
+                          class="discourse-memberlist-member-link trigger-user-card"
+                          data-user-card={{member.username}}
+                        >
+                          {{member.displayName}}
+                        </a>
 
-                        <div class="discourse-memberlist-card-body">
+                        {{#if member.wiseOldManUrl}}
                           <a
-                            href={{member.profileUrl}}
-                            class="discourse-memberlist-card-name trigger-user-card"
-                            data-user-card={{member.username}}
+                            href={{member.wiseOldManUrl}}
+                            class="discourse-memberlist-member-hiscores"
+                            rel="noopener noreferrer"
+                            target="_blank"
                           >
-                            {{member.displayName}}
+                            Hiscores
                           </a>
-
-                          <a
-                            href={{member.profileUrl}}
-                            class="discourse-memberlist-card-username"
-                          >
-                            @{{member.username}}
-                          </a>
-
-                          {{#if member.secondaryLabel}}
-                            <p class="discourse-memberlist-card-meta">
-                              {{member.secondaryLabel}}
-                            </p>
-                          {{/if}}
-                        </div>
-                      </article>
+                        {{/if}}
+                      </li>
                     {{/each}}
-                  </div>
+                  </ul>
                 </section>
               {{/each}}
             </div>
@@ -265,7 +240,7 @@ export default class DiscourseMemberlistPage extends Component {
             <EmptyState
               @body={{if
                 this.filter
-                "No closed groups or members matched your search."
+                "No ranks or members matched your search."
                 "No closed groups have been added yet."
               }}
             />

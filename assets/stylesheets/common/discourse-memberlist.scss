@@ -71,18 +71,18 @@
 .discourse-memberlist-sections {
   display: flex;
   flex-direction: column;
-  gap: 1.25em;
+  gap: 1.1em;
 }
 
 .discourse-memberlist-section {
-  padding: 1.25em;
+  padding: 1.1em 1.25em;
   border-radius: 0.9em;
   border: 1px solid rgb(var(--primary-rgb), 0.08);
   background: rgb(var(--secondary-rgb), 0.65);
 }
 
 .discourse-memberlist-section-header {
-  margin-bottom: 1em;
+  margin-bottom: 0.75em;
 
   h2,
   p {
@@ -90,61 +90,52 @@
   }
 
   p {
-    margin-top: 0.25em;
+    margin-top: 0.2em;
     color: var(--primary-medium);
   }
 }
 
-.discourse-memberlist-grid {
+.discourse-memberlist-members {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.75em;
+  gap: 0.35em 1.25em;
 }
 
-.discourse-memberlist-card {
+.discourse-memberlist-member {
   display: flex;
-  align-items: center;
-  gap: 0.75em;
-  min-width: 0;
-  padding: 0.9em 1em;
-  border-radius: 0.8em;
-  border: 1px solid rgb(var(--primary-rgb), 0.08);
-  background: var(--secondary);
-}
-
-.discourse-memberlist-card-avatar {
-  flex-shrink: 0;
-}
-
-.discourse-memberlist-card-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15em;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.35em 0.75em;
   min-width: 0;
 }
 
-.discourse-memberlist-card-name,
-.discourse-memberlist-card-username {
+.discourse-memberlist-member-link,
+.discourse-memberlist-member-hiscores {
   overflow-wrap: anywhere;
   text-decoration: none;
 }
 
-.discourse-memberlist-card-name {
+.discourse-memberlist-member-link {
   color: var(--primary);
   font-weight: 700;
 
   &:hover {
     color: var(--tertiary);
+    text-decoration: underline;
   }
 }
 
-.discourse-memberlist-card-username,
-.discourse-memberlist-card-meta {
+.discourse-memberlist-member-hiscores {
   color: var(--primary-medium);
-}
+  font-size: 0.875rem;
 
-.discourse-memberlist-card-meta {
-  margin: 0;
+  &:hover {
+    color: var(--tertiary);
+    text-decoration: underline;
+  }
 }
 
 .mobile-view {
@@ -156,5 +147,9 @@
   .discourse-memberlist-hero {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .discourse-memberlist-members {
+    grid-template-columns: 1fr;
   }
 }
