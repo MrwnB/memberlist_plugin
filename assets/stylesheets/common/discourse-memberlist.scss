@@ -211,7 +211,6 @@
   margin-bottom: 0.45em;
   padding: 0.8em 1rem;
   text-align: center;
-  border: 1px solid rgb(var(--primary-rgb), 0.08);
   border-radius: 0.8em;
   background: linear-gradient(
     180deg,
@@ -370,17 +369,13 @@
     outline-offset: 2px;
     border-radius: 999px;
   }
-
-  .d-icon {
-    font-size: 0.78rem;
-  }
 }
 
-.discourse-memberlist-card-link-badge {
-  font-size: 0.68rem;
-  font-weight: 900;
-  letter-spacing: 0.04em;
-  line-height: 1;
+.discourse-memberlist-card-link-image {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  object-fit: contain;
 }
 
 .discourse-memberlist-card-link--wom {
@@ -412,10 +407,6 @@
 
 .discourse-memberlist-card-link--osrs:hover {
   border-color: rgb(182, 123, 27, 0.5);
-}
-
-.discourse-memberlist-card-link--osrs .d-icon {
-  font-size: 0.72rem;
 }
 
 .discourse-memberlist-reserve-block {

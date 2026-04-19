@@ -6,7 +6,6 @@ import { action } from "@ember/object";
 import ConditionalLoadingSpinner from "discourse/components/conditional-loading-spinner";
 import EmptyState from "discourse/components/empty-state";
 import UserAvatar from "discourse/components/user-avatar";
-import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import getURL from "discourse/lib/get-url";
 import { userPath } from "discourse/lib/url";
@@ -15,6 +14,10 @@ const collator = new Intl.Collator(undefined, {
   sensitivity: "base",
   numeric: true,
 });
+const WOM_ICON_URL = getURL("/plugins/memberlist_plugin/images/wom-logo.png");
+const OFFICIAL_HISCORES_ICON_URL = getURL(
+  "/plugins/memberlist_plugin/images/hiscore.gif"
+);
 
 function cleanString(value) {
   const trimmedValue = String(value || "").trim();
@@ -210,7 +213,9 @@ export default class DiscourseMemberlistPage extends Component {
                     userPath(member.username_lower || member.username)
                   ),
                   wiseOldManUrl: wiseOldManUrlForRsn(member.rsn),
+                  wiseOldManIconUrl: WOM_ICON_URL,
                   oldSchoolHiscoresUrl: oldSchoolHiscoresUrlForRsn(member.rsn),
+                  oldSchoolHiscoresIconUrl: OFFICIAL_HISCORES_ICON_URL,
                 };
               })
               .sort(compareMembers),
@@ -297,12 +302,14 @@ export default class DiscourseMemberlistPage extends Component {
                                     aria-label="Wise Old Man profile"
                                     title="Wise Old Man profile"
                                   >
-                                    <span
-                                      class="discourse-memberlist-card-link-badge"
+                                    <img
+                                      src={{member.wiseOldManIconUrl}}
+                                      alt=""
+                                      class="discourse-memberlist-card-link-image"
+                                      width="16"
+                                      height="16"
                                       aria-hidden="true"
-                                    >
-                                      W
-                                    </span>
+                                    />
                                   </a>
                                 {{/if}}
 
@@ -315,7 +322,14 @@ export default class DiscourseMemberlistPage extends Component {
                                     aria-label="Old School RuneScape HiScores"
                                     title="Old School RuneScape HiScores"
                                   >
-                                    {{icon "chart-bar"}}
+                                    <img
+                                      src={{member.oldSchoolHiscoresIconUrl}}
+                                      alt=""
+                                      class="discourse-memberlist-card-link-image"
+                                      width="16"
+                                      height="16"
+                                      aria-hidden="true"
+                                    />
                                   </a>
                                 {{/if}}
                               </div>
@@ -371,12 +385,14 @@ export default class DiscourseMemberlistPage extends Component {
                                         aria-label="Wise Old Man profile"
                                         title="Wise Old Man profile"
                                       >
-                                        <span
-                                          class="discourse-memberlist-card-link-badge"
+                                        <img
+                                          src={{member.wiseOldManIconUrl}}
+                                          alt=""
+                                          class="discourse-memberlist-card-link-image"
+                                          width="16"
+                                          height="16"
                                           aria-hidden="true"
-                                        >
-                                          W
-                                        </span>
+                                        />
                                       </a>
                                     {{/if}}
 
@@ -389,7 +405,14 @@ export default class DiscourseMemberlistPage extends Component {
                                         aria-label="Old School RuneScape HiScores"
                                         title="Old School RuneScape HiScores"
                                       >
-                                        {{icon "chart-bar"}}
+                                        <img
+                                          src={{member.oldSchoolHiscoresIconUrl}}
+                                          alt=""
+                                          class="discourse-memberlist-card-link-image"
+                                          width="16"
+                                          height="16"
+                                          aria-hidden="true"
+                                        />
                                       </a>
                                     {{/if}}
                                   </div>
