@@ -18,6 +18,26 @@ const WOM_ICON_URL = getURL("/plugins/memberlist_plugin/images/wom-logo.png");
 const OFFICIAL_HISCORES_ICON_URL = getURL(
   "/plugins/memberlist_plugin/images/hiscore.gif"
 );
+const SECTION_ICON_FILENAMES = {
+  founder: "Clan_icon_-_Founder.png",
+  leader: "Clan_icon_-_Leader.png",
+  "high-council": "Clan_icon_-_High_Council.png",
+  "head-warlord": "Clan_icon_-_Head_Warlord.png",
+  council: "Clan_icon_-_Council.png",
+  "app-manager": "Clan_icon_-_App_Manager.png",
+  warlord: "Clan_icon_-_Warlord.png",
+  eventmaster: "Clan_icon_-_Eventmaster.png",
+  officer: "Clan_icon_-_Officer.png",
+  "elite-guardian": "Clan_icon_-_Elite_Guardian.png",
+  "high-guardian": "Clan_icon_-_High_Guardian.png",
+  "heroic-guardian": "Clan_icon_-_Heroic_Guardian.png",
+  "honoured-guardian": "Clan_icon_-_Honoured_Guardian.png",
+  guardian: "Clan_icon_-_Guardian.png",
+  "initiate-guardian": "Clan_icon_-_Initiate_Guardian.png",
+  "retired-leader": "Clan_icon_-_Retired_Leader.png",
+  emeritus: "Clan_icon_-_Emeritus.png",
+  guildsman: "Clan_icon_-_Guildsman.png",
+};
 
 function cleanString(value) {
   const trimmedValue = String(value || "").trim();
@@ -96,6 +116,16 @@ function guardianGlowClassNames(member) {
   }
 
   return classNames;
+}
+
+function sectionIconUrlForRankSlug(rankSlug) {
+  const filename = SECTION_ICON_FILENAMES[rankSlug];
+
+  if (!filename) {
+    return null;
+  }
+
+  return getURL(`/plugins/memberlist_plugin/images/${filename}`);
 }
 
 export default class DiscourseMemberlistPage extends Component {
@@ -197,6 +227,7 @@ export default class DiscourseMemberlistPage extends Component {
             key: section.id || section.name,
             isReserveRank,
             rankSlug,
+            headerIconUrl: sectionIconUrlForRankSlug(rankSlug),
             sectionClassName: [
               "discourse-memberlist-section",
               `discourse-memberlist-rank--${rankSlug}`,
@@ -289,7 +320,22 @@ export default class DiscourseMemberlistPage extends Component {
                 {{#each this.primarySections key="key" as |group|}}
                   <section class={{group.sectionClassName}}>
                     <header class="discourse-memberlist-section-header">
-                      <h2>{{group.label}}</h2>
+                      <h2>
+                        {{#if group.headerIconUrl}}
+                          <span class="discourse-memberlist-section-icon-shell">
+                            <img
+                              src={{group.headerIconUrl}}
+                              alt=""
+                              class="discourse-memberlist-section-icon"
+                              width="20"
+                              height="20"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        {{/if}}
+
+                        <span>{{group.label}}</span>
+                      </h2>
                     </header>
 
                     <div class="discourse-memberlist-grid">
@@ -372,7 +418,22 @@ export default class DiscourseMemberlistPage extends Component {
                     {{#each this.reserveSections key="key" as |group|}}
                       <section class={{group.sectionClassName}}>
                         <header class="discourse-memberlist-section-header">
-                          <h2>{{group.label}}</h2>
+                          <h2>
+                            {{#if group.headerIconUrl}}
+                              <span class="discourse-memberlist-section-icon-shell">
+                                <img
+                                  src={{group.headerIconUrl}}
+                                  alt=""
+                                  class="discourse-memberlist-section-icon"
+                                  width="20"
+                                  height="20"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            {{/if}}
+
+                            <span>{{group.label}}</span>
+                          </h2>
                         </header>
 
                         <div class="discourse-memberlist-grid">

@@ -14,53 +14,9 @@
   box-sizing: border-box;
 }
 
-@keyframes discourse-memberlist-dual-guardian-glow {
-  0% {
-    border-color: rgb(138, 82, 194, 0.4);
-    box-shadow:
-      0 0 0 1px rgb(138, 82, 194, 0.14),
-      0 0 18px var(--memberlist-master-guardian-glow),
-      var(--memberlist-card-shadow);
-  }
-
+@keyframes discourse-memberlist-dual-guardian-border-spin {
   100% {
-    border-color: rgb(255, 208, 74, 0.4);
-    box-shadow:
-      0 0 0 1px rgb(255, 208, 74, 0.14),
-      0 0 18px var(--memberlist-grand-guardian-glow),
-      var(--memberlist-card-shadow);
-  }
-}
-
-@keyframes discourse-memberlist-dual-guardian-glow-strong {
-  0% {
-    border-color: rgb(138, 82, 194, 0.58);
-    box-shadow:
-      0 0 0 1px rgb(138, 82, 194, 0.2),
-      0 0 24px var(--memberlist-master-guardian-glow-strong),
-      0 14px 28px rgb(0, 0, 0, 0.08);
-  }
-
-  100% {
-    border-color: rgb(255, 208, 74, 0.58);
-    box-shadow:
-      0 0 0 1px rgb(255, 208, 74, 0.2),
-      0 0 24px var(--memberlist-grand-guardian-glow-strong),
-      0 14px 28px rgb(0, 0, 0, 0.08);
-  }
-}
-
-@keyframes discourse-memberlist-dual-guardian-avatar-glow {
-  0% {
-    box-shadow:
-      0 0 0 2px rgb(138, 82, 194, 0.22),
-      0 0 16px rgb(138, 82, 194, 0.28);
-  }
-
-  100% {
-    box-shadow:
-      0 0 0 2px rgb(255, 208, 74, 0.22),
-      0 0 16px rgb(255, 208, 74, 0.28);
+    transform: rotate(1turn);
   }
 }
 
@@ -267,11 +223,43 @@
   h2 {
     margin: 0;
     color: var(--memberlist-rank-accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
     font-size: 1rem;
     font-weight: 800;
     letter-spacing: 0.02em;
     text-transform: uppercase;
   }
+}
+
+.discourse-memberlist-section-icon-shell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgb(255, 255, 255, 0.55),
+      transparent 48%
+    ),
+    rgb(var(--secondary-rgb), 0.84);
+  box-shadow:
+    0 0 0 1px rgb(var(--primary-rgb), 0.06),
+    0 6px 16px rgb(0, 0, 0, 0.06);
+}
+
+.discourse-memberlist-section-icon {
+  display: block;
+  width: 1.35rem;
+  height: 1.35rem;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgb(0, 0, 0, 0.12));
 }
 
 .discourse-memberlist-grid {
@@ -366,23 +354,71 @@
 }
 
 .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian {
-  border-color: rgb(138, 82, 194, 0.4);
+  position: relative;
+  isolation: isolate;
+  border-color: transparent;
   background: linear-gradient(
     180deg,
     rgb(var(--secondary-rgb), 0.98),
     rgb(var(--secondary-rgb), 0.92)
   );
-  animation: discourse-memberlist-dual-guardian-glow 2.8s ease-in-out infinite
-    alternate;
+  box-shadow:
+    0 0 0 1px rgb(255, 255, 255, 0.08),
+    0 0 16px rgb(138, 82, 194, 0.16),
+    0 0 16px rgb(255, 208, 74, 0.16),
+    var(--memberlist-card-shadow);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: conic-gradient(
+      from 0deg,
+      rgb(138, 82, 194, 0.98),
+      rgb(255, 208, 74, 0.98),
+      rgb(138, 82, 194, 0.98)
+    );
+    animation: discourse-memberlist-dual-guardian-border-spin 2.2s linear
+      infinite;
+    pointer-events: none;
+    /* stylelint-disable-next-line property-no-vendor-prefix */
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    /* stylelint-disable-next-line property-no-vendor-prefix */
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 
   &:hover {
-    animation-name: discourse-memberlist-dual-guardian-glow-strong;
+    box-shadow:
+      0 0 0 1px rgb(255, 255, 255, 0.12),
+      0 0 22px rgb(138, 82, 194, 0.24),
+      0 0 22px rgb(255, 208, 74, 0.24),
+      0 14px 28px rgb(0, 0, 0, 0.08);
+
+    &::before {
+      animation-duration: 1.55s;
+    }
   }
 
   .discourse-memberlist-card-avatar .avatar {
     border-radius: 50%;
-    animation: discourse-memberlist-dual-guardian-avatar-glow 2.8s ease-in-out
-      infinite alternate;
+    box-shadow:
+      0 0 0 2px rgb(255, 255, 255, 0.16),
+      0 0 12px rgb(138, 82, 194, 0.24),
+      0 0 12px rgb(255, 208, 74, 0.24);
   }
 }
 
@@ -390,7 +426,8 @@
   .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian,
   .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian
     .discourse-memberlist-card-avatar
-    .avatar {
+    .avatar,
+  .discourse-memberlist-card--master-guardian.discourse-memberlist-card--grand-guardian::before {
     animation: none;
   }
 }
