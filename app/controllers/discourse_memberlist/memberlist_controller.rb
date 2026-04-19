@@ -82,15 +82,6 @@ module ::DiscourseMemberlist
     end
 
     def rank_sort_order_for(group)
-      if main_rank?(group)
-        [group.full_name, group.name].each do |value|
-          normalized_value = normalized_rank_key(value)
-          return RANK_ORDER_INDEX[normalized_value] if RANK_ORDER_INDEX.key?(normalized_value)
-        end
-
-        return RANK_ORDER.length
-      end
-
       if reserve_rank?(group)
         [group.full_name, group.name].each do |value|
           normalized_value = normalized_rank_key(value)
@@ -100,10 +91,21 @@ module ::DiscourseMemberlist
         return RESERVE_RANKS.length
       end
 
+      if main_rank?(group)
+        [group.full_name, group.name].each do |value|
+          normalized_value = normalized_rank_key(value)
+          return RANK_ORDER_INDEX[normalized_value] if RANK_ORDER_INDEX.key?(normalized_value)
+        end
+
+        return RANK_ORDER.length
+      end
+
       RANK_ORDER.length
     end
 
     def main_rank?(group)
+      return false if reserve_rank?(group)
+
       [group.full_name, group.name].any? do |value|
         RANK_ORDER.include?(normalized_rank_key(value))
       end
