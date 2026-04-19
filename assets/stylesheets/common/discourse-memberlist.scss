@@ -111,7 +111,7 @@
 .discourse-memberlist-group {
   display: flex;
   flex-direction: column;
-  gap: 0.7em;
+  gap: 0.35em;
 }
 
 .discourse-memberlist-section {
@@ -188,27 +188,18 @@
 }
 
 .discourse-memberlist-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  justify-items: center;
-  gap: 0.55em 0.75em;
-  padding: 0.95em;
-  border: 1px solid rgb(var(--primary-rgb), 0.08);
-  border-radius: 0.85em;
-  background: linear-gradient(
-    180deg,
-    rgb(var(--secondary-rgb), 0.98),
-    rgb(var(--secondary-rgb), 0.9)
-  );
+  gap: 0.65em 0.75em;
 }
 
 .discourse-memberlist-card {
   display: flex;
   align-items: center;
   gap: 0.75em;
-  width: 100%;
-  max-width: 260px;
+  flex: 0 1 260px;
+  width: min(100%, 260px);
   min-width: 0;
   padding: 0.55em 0.8em;
   border-radius: 0.7em;
@@ -349,6 +340,10 @@
   }
 
   .discourse-memberlist-grid {
-    grid-template-columns: 1fr;
+    justify-content: stretch;
+  }
+
+  .discourse-memberlist-card {
+    width: 100%;
   }
 }

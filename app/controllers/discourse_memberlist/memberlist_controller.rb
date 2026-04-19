@@ -41,7 +41,7 @@ module ::DiscourseMemberlist
         .where(public_admission: false, automatic: false)
         .to_a
         .sort_by do |group|
-          [reserve_rank?(group) ? 1 : 0, rank_sort_order_for(group), normalized_rank_key(group_label(group))]
+          [group_bucket(group), rank_sort_order_for(group), normalized_rank_key(group_label(group))]
         end
         .filter_map { |group| serialize_group(group) }
     end
@@ -82,6 +82,15 @@ module ::DiscourseMemberlist
     end
 
     def rank_sort_order_for(group)
+      if main_rank?(group)
+        [group.full_name, group.name].each do |value|
+          normalized_value = normalized_rank_key(value)
+          return RANK_ORDER_INDEX[normalized_value] if RANK_ORDER_INDEX.key?(normalized_value)
+        end
+
+        return RANK_ORDER.length
+      end
+
       if reserve_rank?(group)
         [group.full_name, group.name].each do |value|
           normalized_value = normalized_rank_key(value)
@@ -91,16 +100,20 @@ module ::DiscourseMemberlist
         return RESERVE_RANKS.length
       end
 
-      [group.full_name, group.name].each do |value|
-        normalized_value = normalized_rank_for_sort(value)
-        return RANK_ORDER_INDEX[normalized_value] if RANK_ORDER_INDEX.key?(normalized_value)
-      end
-
       RANK_ORDER.length
     end
 
-    def normalized_rank_for_sort(value)
-      normalized_rank_key(value).gsub(/\breserve\b/, "").squeeze(" ").strip
+    def main_rank?(group)
+      [group.full_name, group.name].any? do |value|
+        RANK_ORDER.include?(normalized_rank_key(value))
+      end
+    end
+
+    def group_bucket(group)
+      return 0 if main_rank?(group)
+      return 1 if reserve_rank?(group)
+
+      2
     end
 
     def reserve_rank?(group)
