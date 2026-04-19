@@ -23,6 +23,7 @@ module ::DiscourseMemberlist
     ].freeze
     RESERVE_RANKS = ["retired leader", "emeritus", "guildsman"].freeze
     RANK_ORDER_INDEX = RANK_ORDER.each_with_index.to_h.freeze
+    RESERVE_RANK_INDEX = RESERVE_RANKS.each_with_index.to_h.freeze
     RSN_FIELD_KEY = "rsn"
 
     def index
@@ -81,6 +82,15 @@ module ::DiscourseMemberlist
     end
 
     def rank_sort_order_for(group)
+      if reserve_rank?(group)
+        [group.full_name, group.name].each do |value|
+          normalized_value = normalized_rank_key(value)
+          return RESERVE_RANK_INDEX[normalized_value] if RESERVE_RANK_INDEX.key?(normalized_value)
+        end
+
+        return RESERVE_RANKS.length
+      end
+
       [group.full_name, group.name].each do |value|
         normalized_value = normalized_rank_for_sort(value)
         return RANK_ORDER_INDEX[normalized_value] if RANK_ORDER_INDEX.key?(normalized_value)
