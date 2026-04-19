@@ -22,7 +22,7 @@ module ::DiscourseMemberlist
       "initiate guardian",
       "retired leader",
       "emeritus",
-      "guildsman",
+      "guildsman"
     ].freeze
     RESERVE_RANKS = ["retired leader", "emeritus", "guildsman"].freeze
     RANK_ORDER_INDEX = RANK_ORDER.each_with_index.to_h.freeze
@@ -43,14 +43,23 @@ module ::DiscourseMemberlist
         .where(public_admission: false, automatic: false)
         .to_a
         .sort_by do |group|
-          [group_bucket(group), rank_sort_order_for(group), normalized_rank_key(group_label(group))]
+          [
+            group_bucket(group),
+            rank_sort_order_for(group),
+            normalized_rank_key(group_label(group))
+          ]
         end
         .filter_map { |group| serialize_group(group) }
     end
 
     def serialize_group(group)
       sort_order = rank_sort_order_for(group)
-      members = group.users.where(staged: false, primary_group_id: group.id).order(:username_lower).to_a
+      members =
+        group
+          .users
+          .where(staged: false, primary_group_id: group.id)
+          .order(:username_lower)
+          .to_a
       return if members.empty?
 
       rsn_values_by_user_id = rsn_values_by_user_id_for(members)
@@ -69,14 +78,15 @@ module ::DiscourseMemberlist
               username_lower: user.username_lower,
               name: user.name,
               avatar_template: user.avatar_template,
-              rsn: rsn_values_by_user_id[user.id],
+              rsn: rsn_values_by_user_id[user.id]
             }
-          end,
+          end
       }
     end
 
     def group_label(group)
-      group.full_name.presence || group.name.tr("_-", " ").split.map(&:capitalize).join(" ")
+      group.full_name.presence ||
+        group.name.tr("_-", " ").split.map(&:capitalize).join(" ")
     end
 
     def normalized_group_names(group)
@@ -112,14 +122,19 @@ module ::DiscourseMemberlist
     end
 
     def reserve_rank?(group)
-      normalized_group_names(group).any? { |value| RESERVE_RANKS.include?(value) }
+      normalized_group_names(group).any? do |value|
+        RESERVE_RANKS.include?(value)
+      end
     end
 
     def rsn_values_by_user_id_for(members)
       return {} if members.empty? || rsn_user_field_id.blank?
 
       UserCustomField
-        .where(user_id: members.map(&:id), name: "user_field_#{rsn_user_field_id}")
+        .where(
+          user_id: members.map(&:id),
+          name: "user_field_#{rsn_user_field_id}"
+        )
         .pluck(:user_id, :value)
         .to_h
         .transform_values { |value| cleaned_value(value) }
@@ -127,7 +142,10 @@ module ::DiscourseMemberlist
 
     def rsn_user_field_id
       @rsn_user_field_id ||=
-        UserField.where("LOWER(name) = :field_name OR LOWER(external_name) = :field_name", field_name: RSN_FIELD_KEY).pick(:id)
+        UserField.where(
+          "LOWER(name) = :field_name OR LOWER(external_name) = :field_name",
+          field_name: RSN_FIELD_KEY
+        ).pick(:id)
     end
 
     def cleaned_value(value)

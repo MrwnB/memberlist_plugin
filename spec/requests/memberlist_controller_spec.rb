@@ -38,25 +38,26 @@ RSpec.describe DiscourseMemberlist::MemberlistController do
           "High Council",
           "Retired Leader",
           "Emeritus",
-          "Guildsman",
-        ],
+          "Guildsman"
+        ]
       )
-      expect(sections.map { |section| section["sort_order"] }).to eq([0, 1, 2, 15, 16, 17])
-      expect(sections.first(3).map { |section| section["is_reserve_rank"] }).to eq(
-        [false, false, false],
+      expect(sections.map { |section| section["sort_order"] }).to eq(
+        [0, 1, 2, 15, 16, 17]
       )
-      expect(sections.last(3).map { |section| section["is_reserve_rank"] }).to eq(
-        [true, true, true],
-      )
+      expect(
+        sections.first(3).map { |section| section["is_reserve_rank"] }
+      ).to eq([false, false, false])
+      expect(
+        sections.last(3).map { |section| section["is_reserve_rank"] }
+      ).to eq([true, true, true])
     end
 
-    it "returns no sections when the feature is disabled" do
+    it "returns 404 when the feature is disabled" do
       SiteSetting.discourse_memberlist_enabled = false
 
       get "/memberlist-data.json"
 
-      expect(response.status).to eq(200)
-      expect(response.parsed_body["sections"]).to eq([])
+      expect(response.status).to eq(404)
     end
   end
 end
