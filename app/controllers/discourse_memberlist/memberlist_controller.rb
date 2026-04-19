@@ -20,13 +20,12 @@ module ::DiscourseMemberlist
       "honoured guardian",
       "guardian",
       "initiate guardian",
-      "retired leader", 
-      "emeritus", 
+      "retired leader",
+      "emeritus",
       "guildsman",
     ].freeze
     RESERVE_RANKS = ["retired leader", "emeritus", "guildsman"].freeze
     RANK_ORDER_INDEX = RANK_ORDER.each_with_index.to_h.freeze
-    RESERVE_RANK_INDEX = RESERVE_RANKS.each_with_index.to_h.freeze
     RSN_FIELD_KEY = "rsn"
 
     def index
@@ -80,27 +79,20 @@ module ::DiscourseMemberlist
       group.full_name.presence || group.name.tr("_-", " ").split.map(&:capitalize).join(" ")
     end
 
+    def normalized_group_names(group)
+      [group.full_name, group.name].filter_map do |value|
+        normalized_value = normalized_rank_key(value)
+        normalized_value.presence
+      end
+    end
+
     def normalized_rank_key(value)
       value.to_s.strip.downcase.gsub(/[_\s-]+/, " ")
     end
 
     def rank_sort_order_for(group)
-      if reserve_rank?(group)
-        [group.full_name, group.name].each do |value|
-          normalized_value = normalized_rank_key(value)
-          return RESERVE_RANK_INDEX[normalized_value] if RESERVE_RANK_INDEX.key?(normalized_value)
-        end
-
-        return RESERVE_RANKS.length
-      end
-
-      if main_rank?(group)
-        [group.full_name, group.name].each do |value|
-          normalized_value = normalized_rank_key(value)
-          return RANK_ORDER_INDEX[normalized_value] if RANK_ORDER_INDEX.key?(normalized_value)
-        end
-
-        return RANK_ORDER.length
+      normalized_group_names(group).each do |value|
+        return RANK_ORDER_INDEX[value] if RANK_ORDER_INDEX.key?(value)
       end
 
       RANK_ORDER.length
@@ -109,9 +101,7 @@ module ::DiscourseMemberlist
     def main_rank?(group)
       return false if reserve_rank?(group)
 
-      [group.full_name, group.name].any? do |value|
-        RANK_ORDER.include?(normalized_rank_key(value))
-      end
+      normalized_group_names(group).any? { |value| RANK_ORDER.include?(value) }
     end
 
     def group_bucket(group)
@@ -122,9 +112,7 @@ module ::DiscourseMemberlist
     end
 
     def reserve_rank?(group)
-      [group.full_name, group.name].any? do |value|
-        RESERVE_RANKS.include?(normalized_rank_key(value))
-      end
+      normalized_group_names(group).any? { |value| RESERVE_RANKS.include?(value) }
     end
 
     def rsn_values_by_user_id_for(members)

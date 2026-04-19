@@ -109,6 +109,7 @@
 }
 
 .discourse-memberlist-section {
+  --memberlist-rank-accent: rgb(var(--tertiary-rgb), 0.95);
   position: relative;
   overflow: hidden;
   padding: 0.9em;
@@ -126,30 +127,8 @@
     position: absolute;
     inset: 0 auto 0 0;
     width: 4px;
-    background: linear-gradient(
-      180deg,
-      rgb(var(--tertiary-rgb), 0.95),
-      rgb(var(--tertiary-rgb), 0.45)
-    );
+    background: var(--memberlist-rank-accent);
   }
-}
-
-.discourse-memberlist-sections
-  > .discourse-memberlist-section:nth-child(3n + 2)::before {
-  background: linear-gradient(
-    180deg,
-    rgb(var(--primary-rgb), 0.82),
-    rgb(var(--tertiary-rgb), 0.45)
-  );
-}
-
-.discourse-memberlist-sections
-  > .discourse-memberlist-section:nth-child(3n + 3)::before {
-  background: linear-gradient(
-    180deg,
-    rgb(var(--success-rgb), 0.9),
-    rgb(var(--tertiary-rgb), 0.38)
-  );
 }
 
 .discourse-memberlist-section-reserve {
@@ -158,6 +137,72 @@
     rgb(var(--secondary-rgb), 0.74),
     rgb(var(--secondary-rgb), 0.62)
   );
+}
+
+.discourse-memberlist-rank--founder,
+.discourse-memberlist-rank--leader {
+  --memberlist-rank-accent: #f00;
+}
+
+.discourse-memberlist-rank--high-council {
+  --memberlist-rank-accent: #ffb000;
+}
+
+.discourse-memberlist-rank--head-warlord {
+  --memberlist-rank-accent: #ad1457;
+}
+
+.discourse-memberlist-rank--council {
+  --memberlist-rank-accent: #f1c40f;
+}
+
+.discourse-memberlist-rank--app-manager {
+  --memberlist-rank-accent: #60bbf8;
+}
+
+.discourse-memberlist-rank--warlord {
+  --memberlist-rank-accent: #0d9100;
+}
+
+.discourse-memberlist-rank--eventmaster {
+  --memberlist-rank-accent: #246ce4;
+}
+
+.discourse-memberlist-rank--officer {
+  --memberlist-rank-accent: #2bff03;
+}
+
+.discourse-memberlist-rank--elite-guardian {
+  --memberlist-rank-accent: #ba7bff;
+}
+
+.discourse-memberlist-rank--high-guardian {
+  --memberlist-rank-accent: #9e65d6;
+}
+
+.discourse-memberlist-rank--heroic-guardian,
+.discourse-memberlist-rank--honoured-guardian {
+  --memberlist-rank-accent: #8a52c2;
+}
+
+.discourse-memberlist-rank--guardian {
+  --memberlist-rank-accent: #763eae;
+}
+
+.discourse-memberlist-rank--initiate-guardian {
+  --memberlist-rank-accent: #4f1a83;
+}
+
+.discourse-memberlist-rank--retired-leader {
+  --memberlist-rank-accent: #ff1493;
+}
+
+.discourse-memberlist-rank--emeritus {
+  --memberlist-rank-accent: #ad9b67;
+}
+
+.discourse-memberlist-rank--guildsman {
+  --memberlist-rank-accent: #c3392b;
 }
 
 .discourse-memberlist-section-header {

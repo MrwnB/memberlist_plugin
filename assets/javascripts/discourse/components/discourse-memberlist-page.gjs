@@ -62,6 +62,10 @@ function memberMatchesFilter(member, filterValue) {
   return searchableValue.includes(filterValue);
 }
 
+function rankSlugForSection(section) {
+  return normalizeKey(section.name || section.label).replace(/\s+/g, "-");
+}
+
 export default class DiscourseMemberlistPage extends Component {
   @tracked filter = "";
   @tracked isLoading = true;
@@ -150,21 +154,37 @@ export default class DiscourseMemberlistPage extends Component {
       const sections = response?.sections || [];
 
       this.sections = sections
-        .map((section) => ({
-          ...section,
-          key: section.id || section.name,
-          sortOrder: section.sort_order ?? Number.MAX_SAFE_INTEGER,
-          members: (section.members || [])
-            .map((member) => ({
-              ...member,
-              key: member.id || member.username,
-              profileUrl: getURL(
-                userPath(member.username_lower || member.username)
-              ),
-              wiseOldManUrl: wiseOldManUrlForRsn(member.rsn),
-            }))
-            .sort(compareMembers),
-        }))
+        .map((section) => {
+          const isReserveRank = Boolean(
+            section.isReserveRank ?? section.is_reserve_rank
+          );
+          const rankSlug = rankSlugForSection(section);
+
+          return {
+            ...section,
+            key: section.id || section.name,
+            isReserveRank,
+            rankSlug,
+            sectionClassName: [
+              "discourse-memberlist-section",
+              `discourse-memberlist-rank--${rankSlug}`,
+              isReserveRank && "discourse-memberlist-section-reserve",
+            ]
+              .filter(Boolean)
+              .join(" "),
+            sortOrder: section.sort_order ?? Number.MAX_SAFE_INTEGER,
+            members: (section.members || [])
+              .map((member) => ({
+                ...member,
+                key: member.id || member.username,
+                profileUrl: getURL(
+                  userPath(member.username_lower || member.username)
+                ),
+                wiseOldManUrl: wiseOldManUrlForRsn(member.rsn),
+              }))
+              .sort(compareMembers),
+          };
+        })
         .sort(compareSections);
     } catch {
       this.loadError = "We couldn't load the memberlist right now.";
@@ -211,7 +231,7 @@ export default class DiscourseMemberlistPage extends Component {
             <div class="discourse-memberlist-sections">
               {{#if this.hasPrimarySections}}
                 {{#each this.primarySections key="key" as |group|}}
-                  <section class="discourse-memberlist-section">
+                  <section class={{group.sectionClassName}}>
                     <header class="discourse-memberlist-section-header">
                       <h2>{{group.label}}</h2>
                     </header>
@@ -261,9 +281,7 @@ export default class DiscourseMemberlistPage extends Component {
 
                   <div class="discourse-memberlist-reserve-sections">
                     {{#each this.reserveSections key="key" as |group|}}
-                      <section
-                        class="discourse-memberlist-section discourse-memberlist-section-reserve"
-                      >
+                      <section class={{group.sectionClassName}}>
                         <header class="discourse-memberlist-section-header">
                           <h2>{{group.label}}</h2>
                         </header>
