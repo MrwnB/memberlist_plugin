@@ -21,12 +21,28 @@
 }
 
 @keyframes discourse-memberlist-dual-guardian-border-fill {
-  from {
+  0% {
     --memberlist-dual-border-fill: 0%;
+    --memberlist-dual-leading-color: rgb(255, 208, 74, 0.98);
+    --memberlist-dual-trailing-color: rgb(138, 82, 194, 0.98);
   }
 
-  to {
+  49.999% {
     --memberlist-dual-border-fill: 100%;
+    --memberlist-dual-leading-color: rgb(255, 208, 74, 0.98);
+    --memberlist-dual-trailing-color: rgb(138, 82, 194, 0.98);
+  }
+
+  50% {
+    --memberlist-dual-border-fill: 0%;
+    --memberlist-dual-leading-color: rgb(138, 82, 194, 0.98);
+    --memberlist-dual-trailing-color: rgb(255, 208, 74, 0.98);
+  }
+
+  100% {
+    --memberlist-dual-border-fill: 100%;
+    --memberlist-dual-leading-color: rgb(138, 82, 194, 0.98);
+    --memberlist-dual-trailing-color: rgb(255, 208, 74, 0.98);
   }
 }
 
@@ -245,13 +261,12 @@
 }
 
 .discourse-memberlist-section-icon-shell {
-  display: grid;
-  place-items: center;
-  width: 2.05rem;
-  height: 2.05rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
   flex: 0 0 auto;
-  overflow: hidden;
-  padding: 0.24rem;
   border-radius: 999px;
   background: rgb(var(--secondary-rgb), 0.88);
   box-shadow:
@@ -262,10 +277,8 @@
 
 .discourse-memberlist-section-icon {
   display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
+  width: 1.5rem;
+  height: 1.5rem;
   object-fit: contain;
   object-position: center;
   filter: drop-shadow(0 2px 4px rgb(0, 0, 0, 0.12));
@@ -366,6 +379,8 @@
   border-color: transparent;
 
   --memberlist-dual-border-fill: 0%;
+  --memberlist-dual-leading-color: rgb(255, 208, 74, 0.98);
+  --memberlist-dual-trailing-color: rgb(138, 82, 194, 0.98);
   background:
     linear-gradient(
         180deg,
@@ -375,8 +390,8 @@
       padding-box,
     conic-gradient(
         from -90deg,
-        rgb(255, 208, 74, 0.98) 0 var(--memberlist-dual-border-fill),
-        rgb(138, 82, 194, 0.98) var(--memberlist-dual-border-fill) 100%
+        var(--memberlist-dual-leading-color) 0 var(--memberlist-dual-border-fill),
+        var(--memberlist-dual-trailing-color) var(--memberlist-dual-border-fill) 100%
       )
       border-box;
   box-shadow:
@@ -384,8 +399,8 @@
     0 0 16px rgb(138, 82, 194, 0.16),
     0 0 16px rgb(255, 208, 74, 0.16),
     var(--memberlist-card-shadow);
-  animation: discourse-memberlist-dual-guardian-border-fill 2.8s
-    cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+  animation: discourse-memberlist-dual-guardian-border-fill 3.2s linear
+    infinite;
 
   &:hover {
     box-shadow:
@@ -393,7 +408,6 @@
       0 0 22px rgb(138, 82, 194, 0.24),
       0 0 22px rgb(255, 208, 74, 0.24),
       0 14px 28px rgb(0, 0, 0, 0.08);
-    animation-duration: 2.1s;
   }
 
   .discourse-memberlist-card-avatar .avatar {
