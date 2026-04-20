@@ -285,7 +285,6 @@ export default class DiscourseMemberlistPage extends Component {
       <div class="discourse-memberlist-shell">
         <header class="discourse-memberlist-hero">
           <div class="discourse-memberlist-hero-copy">
-            <p class="discourse-memberlist-eyebrow">Community memberlist</p>
             <h1>Memberlist</h1>
             <p>Browse members by their primary rank and jump to profiles fast.</p>
           </div>
