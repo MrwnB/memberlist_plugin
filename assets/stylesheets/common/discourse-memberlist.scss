@@ -19,9 +19,9 @@
   100% {
     box-shadow:
       inset 0 1px 0 rgb(255, 255, 255, 0.22),
-      0 0 0 1px rgb(138, 82, 194, 0.2),
-      0 0 30px rgb(138, 82, 194, 0.28),
-      0 0 10px rgb(255, 208, 74, 0.05),
+      0 0 0 1px rgb(138, 82, 194, 0.12),
+      0 0 18px var(--memberlist-master-guardian-glow),
+      0 0 0 rgb(255, 208, 74, 0),
       var(--memberlist-card-shadow);
   }
 
@@ -49,7 +49,7 @@
 @keyframes discourse-memberlist-dual-guardian-yellow-emphasis {
   0%,
   100% {
-    opacity: 0.1;
+    opacity: 0.02;
   }
 
   50% {
@@ -62,8 +62,8 @@
   100% {
     box-shadow:
       0 0 0 2px rgb(138, 82, 194, 0.22),
-      0 0 18px rgb(138, 82, 194, 0.28),
-      0 0 6px rgb(255, 208, 74, 0.06);
+      0 0 16px rgb(138, 82, 194, 0.28),
+      0 0 0 rgb(255, 208, 74, 0);
   }
 
   50% {
@@ -423,9 +423,9 @@
       padding-box;
   box-shadow:
     inset 0 1px 0 rgb(255, 255, 255, 0.22),
-    0 0 0 1px rgb(138, 82, 194, 0.2),
-    0 0 30px rgb(138, 82, 194, 0.28),
-    0 0 10px rgb(255, 208, 74, 0.05),
+    0 0 0 1px rgb(138, 82, 194, 0.12),
+    0 0 18px var(--memberlist-master-guardian-glow),
+    0 0 0 rgb(255, 208, 74, 0),
     var(--memberlist-card-shadow);
   animation: discourse-memberlist-dual-guardian-aura 7.4s ease-in-out infinite;
 
@@ -458,9 +458,9 @@
   &::before {
     background-image: linear-gradient(
       120deg,
-      rgb(128, 70, 188, 0.99) 0%,
-      rgb(168, 108, 231, 0.97) 42%,
-      rgb(255, 214, 98, 0.42) 100%
+      rgb(138, 82, 194, 0.99) 0%,
+      rgb(170, 114, 226, 0.97) 62%,
+      rgb(255, 214, 98, 0.18) 100%
     );
     opacity: 1;
     animation: discourse-memberlist-dual-guardian-purple-emphasis 6.8s ease-in-out
@@ -474,7 +474,7 @@
       rgb(255, 230, 126, 0.92) 38%,
       rgb(154, 95, 214, 0.38) 100%
     );
-    opacity: 0.1;
+    opacity: 0.02;
     animation: discourse-memberlist-dual-guardian-yellow-emphasis 6.8s ease-in-out
       infinite;
   }
@@ -496,8 +496,8 @@
     border-radius: 50%;
     box-shadow:
       0 0 0 2px rgb(138, 82, 194, 0.22),
-      0 0 18px rgb(138, 82, 194, 0.28),
-      0 0 6px rgb(255, 208, 74, 0.06);
+      0 0 16px rgb(138, 82, 194, 0.28),
+      0 0 0 rgb(255, 208, 74, 0);
     animation: discourse-memberlist-dual-guardian-avatar-aura 7.4s ease-in-out
       infinite;
   }
