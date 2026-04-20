@@ -427,7 +427,11 @@
     0 0 18px var(--memberlist-master-guardian-glow),
     0 0 0 rgb(255, 208, 74, 0),
     var(--memberlist-card-shadow);
-  animation: discourse-memberlist-dual-guardian-aura 7.4s ease-in-out infinite;
+  animation: discourse-memberlist-dual-guardian-aura 6.2s ease-in-out infinite;
+  transition:
+    transform 0.16s ease,
+    filter 0.16s ease,
+    border-color 0.16s ease;
 
   > * {
     position: relative;
@@ -463,7 +467,7 @@
       rgb(255, 214, 98, 0.18) 100%
     );
     opacity: 1;
-    animation: discourse-memberlist-dual-guardian-purple-emphasis 6.8s ease-in-out
+    animation: discourse-memberlist-dual-guardian-purple-emphasis 5.8s ease-in-out
       infinite;
   }
 
@@ -475,21 +479,28 @@
       rgb(154, 95, 214, 0.38) 100%
     );
     opacity: 0.02;
-    animation: discourse-memberlist-dual-guardian-yellow-emphasis 6.8s ease-in-out
+    animation: discourse-memberlist-dual-guardian-yellow-emphasis 5.8s ease-in-out
       infinite;
   }
 
   &:hover {
     border-color: transparent;
+    filter:
+      drop-shadow(0 0 8px rgb(138, 82, 194, 0.26))
+      drop-shadow(0 0 10px rgb(255, 208, 74, 0.18));
   }
 
   &:hover::before,
   &:hover::after {
-    filter: saturate(1.08) brightness(1.06);
+    filter: saturate(1.14) brightness(1.1);
   }
 
   &:hover .discourse-memberlist-card-avatar .avatar {
-    filter: saturate(1.06) brightness(1.04);
+    filter:
+      saturate(1.1)
+      brightness(1.06)
+      drop-shadow(0 0 6px rgb(138, 82, 194, 0.18))
+      drop-shadow(0 0 6px rgb(255, 208, 74, 0.14));
   }
 
   .discourse-memberlist-card-avatar .avatar {
@@ -498,7 +509,7 @@
       0 0 0 2px rgb(138, 82, 194, 0.22),
       0 0 16px rgb(138, 82, 194, 0.28),
       0 0 0 rgb(255, 208, 74, 0);
-    animation: discourse-memberlist-dual-guardian-avatar-aura 7.4s ease-in-out
+    animation: discourse-memberlist-dual-guardian-avatar-aura 6.2s ease-in-out
       infinite;
   }
 }
