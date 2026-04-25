@@ -3,7 +3,7 @@
 # name: memberlist_plugin
 # about: Public memberlist page for visible closed groups and their members
 # version: 0.1
-# authors: OpenAI
+# authors: GoreDef
 # url: https://www.wildernessguardians.com
 # required_version: 2.7.0
 
